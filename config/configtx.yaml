@@ -141,7 +141,7 @@ Application: &ApplicationDefaults
     ACLs: &ACLsDefault
         # This section provides defaults for policies for various resources
         # in the system. These "resources" could be functions on system chaincodes
-        # (e.g., "GetBlockByNumber" on the "qscc" system chaincode) or other resources
+        # (e.g., "GetBlockByNumber" on the "qscc" system chaincodes) or other resources
         # (e.g.,who can receive Block events). This section does NOT specify the resource's
         # definition or API, but just the ACL policy for it.
         #
@@ -206,7 +206,7 @@ Application: &ApplicationDefaults
         # ACL policy for invoking chaincodes on peer
         peer/Propose: /Channel/Application/Writers
 
-        # ACL policy for chaincode to chaincode invocation
+        # ACL policy for chaincodes to chaincodes invocation
         peer/ChaincodeToChaincode: /Channel/Application/Writers
 
         #---Events resource to policy mapping for access control###---#

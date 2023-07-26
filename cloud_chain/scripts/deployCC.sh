@@ -43,14 +43,14 @@ elif [ -z "$CC_SRC_PATH" ] || [ "$CC_SRC_PATH" = "NA" ]; then
 elif [ -z "$CC_SRC_LANGUAGE" ] || [ "$CC_SRC_LANGUAGE" = "NA" ]; then
   fatalln "No chaincode language was provided. Valid call example: ./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go"
 
-## Make sure that the path to the chaincode exists
+## Make sure that the path to the chaincodes exists
 elif [ ! -d "$CC_SRC_PATH" ] && [ ! -f "$CC_SRC_PATH" ]; then
   fatalln "Path to chaincode does not exist. Please provide different path."
 fi
 
 CC_SRC_LANGUAGE=$(echo "$CC_SRC_LANGUAGE" | tr [:upper:] [:lower:])
 
-# do some language specific preparation to the chaincode before packaging
+# do some language specific preparation to the chaincodes before packaging
 if [ "$CC_SRC_LANGUAGE" = "go" ]; then
   CC_RUNTIME_LANGUAGE=golang
 
@@ -113,7 +113,7 @@ fi
 
 packageChaincode() {
   set -x
-  peer lifecycle chaincode package ${CC_NAME}.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label ${CC_NAME}_${CC_VERSION} >&log.txt
+  peer lifecycle chaincodes package ${CC_NAME}.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label ${CC_NAME}_${CC_VERSION} >&log.txt
   res=$?
   { set +x; } 2>/dev/null
   cat log.txt
@@ -121,22 +121,22 @@ packageChaincode() {
   successln "Chaincode is packaged"
 }
 
-## package the chaincode
+## package the chaincodes
 packageChaincode
 
-## Install chaincode on peer0.org1 and peer0.org2
+## Install chaincodes on peer0.org1 and peer0.org2
 infoln "Installing chaincode on peer0.org1..."
 installChaincode 1
 infoln "Install chaincode on peer0.org2..."
 installChaincode 2
 
-## query whether the chaincode is installed
+## query whether the chaincodes is installed
 queryInstalled 1
 
 ## approve the definition for org1
 approveForMyOrg 1
 
-## check whether the chaincode definition is ready to be committed
+## check whether the chaincodes definition is ready to be committed
 ## expect org1 to have approved and org2 not to
 checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
 checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
@@ -144,7 +144,7 @@ checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
 ## now approve also for org2
 approveForMyOrg 2
 
-## check whether the chaincode definition is ready to be committed
+## check whether the chaincodes definition is ready to be committed
 ## expect them both to have approved
 checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
 checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
@@ -156,7 +156,7 @@ commitChaincodeDefinition 1 2
 queryCommitted 1
 queryCommitted 2
 
-## Invoke the chaincode - this does require that the chaincode have the 'initLedger'
+## Invoke the chaincodes - this does require that the chaincodes have the 'initLedger'
 ## method defined
 if [ "$CC_INIT_FCN" = "NA" ]; then
   infoln "Chaincode initialization is not required"

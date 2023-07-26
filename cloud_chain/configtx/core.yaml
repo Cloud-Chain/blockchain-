@@ -22,12 +22,12 @@ peer:
     # By default, it will listen on all network interfaces
     listenAddress: 0.0.0.0:7051
 
-    # The endpoint this peer uses to listen for inbound chaincode connections.
+    # The endpoint this peer uses to listen for inbound chaincodes connections.
     # If this is commented-out, the listen address is selected to be
     # the peer's address (see below) with port 7052
     # chaincodeListenAddress: 0.0.0.0:7052
 
-    # The endpoint the chaincode for this peer uses to connect to the peer.
+    # The endpoint the chaincodes for this peer uses to connect to the peer.
     # If this is not specified, the chaincodeListenAddress address is selected.
     # And if chaincodeListenAddress is not specified, address is selected from
     # peer address (see below). If specified peer address is invalid then it
@@ -397,7 +397,7 @@ peer:
     # Handlers defines custom handlers that can filter and mutate
     # objects passing within the peer, such as:
     #   Auth filter - reject or forward proposals from clients
-    #   Decorators  - append or mutate the chaincode input passed to the chaincode
+    #   Decorators  - append or mutate the chaincodes input passed to the chaincodes
     #   Endorsers   - Custom signing over proposal response payload and its mutation
     # Valid handler definition contains:
     #   - A name which is a factory method name defined in
@@ -454,7 +454,7 @@ peer:
 
     # The discovery service is used by clients to query information about peers,
     # such as - which peers have joined a certain channel, what is the latest
-    # channel config, and most importantly - given a chaincode and a channel,
+    # channel config, and most importantly - given a chaincodes and a channel,
     # what possible sets of peers satisfy the endorsement policy.
     discovery:
         enabled: true
@@ -474,7 +474,7 @@ peer:
         # Currently this option is only applied to endorser service and deliver service.
         # When the property is missing or the value is 0, the concurrency limit is disabled for the service.
         concurrency:
-            # endorserService limits concurrent requests to endorser service that handles chaincode deployment, query and invocation,
+            # endorserService limits concurrent requests to endorser service that handles chaincodes deployment, query and invocation,
             # including both user chaincodes and system chaincodes.
             endorserService: 2500
             # deliverService limits concurrent event listeners registered to deliver service for blocks and transaction events.
@@ -500,7 +500,7 @@ vm:
     # unix:///var/run/docker.sock
     # http://localhost:2375
     # https://localhost:2376
-    # If you utilize external chaincode builders and don't need the default Docker chaincode builder,
+    # If you utilize external chaincodes builders and don't need the default Docker chaincodes builder,
     # the endpoint should be unconfigured so that the peer's Docker health checker doesn't get registered.
     endpoint: unix:///var/run/docker.sock
 
@@ -515,7 +515,7 @@ vm:
             key:
                 file: docker/tls.key
 
-        # Enables/disables the standard out/err from chaincode containers for
+        # Enables/disables the standard out/err from chaincodes containers for
         # debugging purposes
         attachStdout: false
 
@@ -550,17 +550,17 @@ chaincode:
 
     # The id is used by the Chaincode stub to register the executing Chaincode
     # ID with the Peer and is generally supplied through ENV variables
-    # the `path` form of ID is provided when installing the chaincode.
+    # the `path` form of ID is provided when installing the chaincodes.
     # The `name` is used for all other requests and can be any string.
     id:
         path:
         name:
 
-    # Generic builder environment, suitable for most chaincode types
+    # Generic builder environment, suitable for most chaincodes types
     builder: $(DOCKER_NS)/fabric-ccenv:$(TWO_DIGIT_VERSION)
 
     # Enables/disables force pulling of the base docker images (listed below)
-    # during user chaincode instantiation.
+    # during user chaincodes instantiation.
     # Useful when using moving image tags (such as :latest)
     pull: false
 
@@ -568,14 +568,14 @@ chaincode:
         # golang will never need more than baseos
         runtime: $(DOCKER_NS)/fabric-baseos:$(TWO_DIGIT_VERSION)
 
-        # whether or not golang chaincode should be linked dynamically
+        # whether or not golang chaincodes should be linked dynamically
         dynamicLink: false
 
     java:
         # This is an image based on java:openjdk-8 with addition compiler
         # tools added for java shim layer packaging.
         # This image is packed with shim layer libraries that are necessary
-        # for Java chaincode runtime.
+        # for Java chaincodes runtime.
         runtime: $(DOCKER_NS)/fabric-javaenv:$(TWO_DIGIT_VERSION)
 
     node:
@@ -583,7 +583,7 @@ chaincode:
         runtime: $(DOCKER_NS)/fabric-nodeenv:$(TWO_DIGIT_VERSION)
 
     # List of directories to treat as external builders and launchers for
-    # chaincode. The external builder detection processing will iterate over the
+    # chaincodes. The external builder detection processing will iterate over the
     # builders in the order specified below.
     # If you don't need to fallback to the default Docker builder, also unconfigure vm.endpoint above.
     # To override this property via env variable use CORE_CHAINCODE_EXTERNALBUILDERS: [{name: x, path: dir1}, {name: y, path: dir2}]
@@ -594,7 +594,7 @@ chaincode:
            - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG
 
 
-    # The maximum duration to wait for the chaincode build and install process
+    # The maximum duration to wait for the chaincodes build and install process
     # to complete.
     installTimeout: 300s
 
@@ -608,19 +608,19 @@ chaincode:
     # Note that during Invoke, if the image is not available (e.g. being
     # cleaned up when in development environment), the peer will automatically
     # build the image, which might take more time. In production environment,
-    # the chaincode image is unlikely to be deleted, so the timeout could be
+    # the chaincodes image is unlikely to be deleted, so the timeout could be
     # reduced accordingly.
     executetimeout: 30s
 
     # There are 2 modes: "dev" and "net".
-    # In dev mode, user runs the chaincode after starting peer from
+    # In dev mode, user runs the chaincodes after starting peer from
     # command line on local machine.
-    # In net mode, peer will run chaincode in a docker container.
+    # In net mode, peer will run chaincodes in a docker container.
     mode: net
 
     # keepalive in seconds. In situations where the communication goes through a
     # proxy that does not support keep-alive, this parameter will maintain connection
-    # between peer and chaincode.
+    # between peer and chaincodes.
     # A value <= 0 turns keepalive off
     keepalive: 0
 
@@ -631,13 +631,13 @@ chaincode:
         lscc: enable
         qscc: enable
 
-    # Logging section for the chaincode container
+    # Logging section for the chaincodes container
     logging:
-      # Default level for all loggers within the chaincode container
+      # Default level for all loggers within the chaincodes container
       level:  info
       # Override default level for the 'shim' logger
       shim:   warning
-      # Format for the chaincode container logs
+      # Format for the chaincodes container logs
       format: '%{color}%{time:2006-01-02 15:04:05.000 MST} [%{module}] %{shortfunc} -> %{level:.4s} %{id:03x}%{color:reset} %{message}'
 
 ###############################################################################
@@ -679,8 +679,8 @@ ledger:
        # CouchDB request timeout (unit: duration, e.g. 20s)
        requestTimeout: 35s
        # Limit on the number of records per each CouchDB query
-       # Note that chaincode queries are only bound by totalQueryLimit.
-       # Internally the chaincode may execute multiple CouchDB queries,
+       # Note that chaincodes queries are only bound by totalQueryLimit.
+       # Internally the chaincodes may execute multiple CouchDB queries,
        # each of size internalQueryLimit.
        internalQueryLimit: 1000
        # Limit on the number of records per CouchDB bulk update batch

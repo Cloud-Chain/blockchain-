@@ -8,7 +8,7 @@
 # This script brings up a Hyperledger Fabric network for testing smart contracts
 # and applications. The test network consists of two organizations with one
 # peer each, and a single node Raft ordering service. Users can also use this
-# script to create a channel deploy a chaincode on the channel
+# script to create a channel deploy a chaincodes on the channel
 #
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
@@ -320,7 +320,7 @@ function createChannel() {
 }
 
 
-## Call the script to deploy a chaincode to the channel
+## Call the script to deploy a chaincodes to the channel
 function deployCC() {
   scripts/deployCC.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE
 
@@ -329,7 +329,7 @@ function deployCC() {
   fi
 }
 
-## Call the script to deploy a chaincode to the channel
+## Call the script to deploy a chaincodes to the channel
 function deployCCAAS() {
   scripts/deployCCAAS.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CCAAS_DOCKER_RUN $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE $CCAAS_DOCKER_RUN
 
@@ -365,7 +365,7 @@ function networkDown() {
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     ${CONTAINER_CLI} volume rm docker_orderer.example.com docker_peer0.org1.example.com docker_peer0.org2.example.com
-    #Cleanup the chaincode containers
+    #Cleanup the chaincodes containers
     clearContainers
     #Cleanup images
     removeUnwantedImages
@@ -393,15 +393,15 @@ MAX_RETRY=5
 CLI_DELAY=3
 # channel name defaults to "mychannel"
 CHANNEL_NAME="mychannel"
-# chaincode name defaults to "NA"
+# chaincodes name defaults to "NA"
 CC_NAME="NA"
-# chaincode path defaults to "NA"
+# chaincodes path defaults to "NA"
 CC_SRC_PATH="NA"
 # endorsement policy defaults to "NA". This would allow chaincodes to use the majority default policy.
 CC_END_POLICY="NA"
 # collection configuration defaults to "NA"
 CC_COLL_CONFIG="NA"
-# chaincode init function defaults to "NA"
+# chaincodes init function defaults to "NA"
 CC_INIT_FCN="NA"
 # use this as the default docker-compose yaml definition
 COMPOSE_FILE_BASE=compose-test-net.yaml
@@ -416,7 +416,7 @@ COMPOSE_FILE_ORG3_COUCH=compose-couch-org3.yaml
 # certificate authorities compose file
 COMPOSE_FILE_ORG3_CA=compose-ca-org3.yaml
 #
-# chaincode language defaults to "NA"
+# chaincodes language defaults to "NA"
 CC_SRC_LANGUAGE="NA"
 # default to running the docker commands for the CCAAS
 CCAAS_DOCKER_RUN=true

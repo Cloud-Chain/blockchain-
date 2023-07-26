@@ -39,55 +39,47 @@ infoln "체인코드 패키징"
 . scripts/ccutils.sh
 
 packaging(){
-    # CC_MARKET_PATH="${PWD}/chaincode/chaincode_market/"
-    # CC_REVENUE_PATH="${PWD}/chaincode/chaincode_revenue/"
-    # CC_PEOPLE_PATH="${PWD}/chaincode/chaincode_people/"
     CC_TRANSACTION_PATH="${PWD}/chaincode/chaincode_transaction"
-    # echo $CC_MARKET_PATH
-    # echo $CC_REVENUE_PATH
-    # echo $CC_PEOPLE_PATH
+    CC_INSPECTION_PATH="${PWD}/chaincode/chaincode_inspection"
+
     echo $CC_USED_CAR_PATH
     if [ ! -d Package ]; then
         mkdir Package
     fi
     set -x
-    peer lifecycle chaincode package Package/transaction.tar.gz --path ${CC_TRANSACTION_PATH} --lang golang --label transaction_${CC_VERSION} >&log.txt
+    peer lifecycle chaincodes package Package/transaction.tar.gz --path ${CC_TRANSACTION_PATH} --lang golang --label transaction_${CC_VERSION} >&log.txt
     cat log.txt
-    # peer lifecycle chaincode package Package/market.tar.gz --path ${CC_MARKET_PATH} --lang golang --label market_${CC_VERSION} >&log.txt
-    # cat log.txt
-    # peer lifecycle chaincode package Package/people.tar.gz --path ${CC_PEOPLE_PATH} --lang golang --label people_${CC_VERSION} >&log.txt
-    # cat log.txt
-    # peer lifecycle chaincode package Package/revenue.tar.gz --path ${CC_REVENUE_PATH} --lang golang --label revenue_${CC_VERSION} >&log.txt
-    # cat log.txt
+     peer lifecycle chaincodes package Package/inspection.tar.gz --path ${CC_MARKET_PATH} --lang golang --label inspection_${CC_VERSION} >&log.txt
+    cat log.txt
     set +x
     successln "체인코드 패키징 완료"
 }
 
 chaincodeinstall(){
     export CORE_PEER_TLS_ENABLED=true
-    echo "Seller에 체인코드 설치"
+    echo "Seller에 transaction 체인코드 설치"
     setGlobals seller
-    peer lifecycle chaincode install Package/transaction.tar.gz >&log.txt
+    peer lifecycle chaincodes install Package/transaction.tar.gz >&log.txt
     cat log.txt
-    echo "Buyer에 체인코드 설치"
+    echo "Buyer에 transaction 체인코드 설치"
     setGlobals buyer
-    peer lifecycle chaincode install Package/transaction.tar.gz >&log.txt
+    peer lifecycle chaincodes install Package/transaction.tar.gz >&log.txt
     cat log.txt
-    echo "inspector에 체인코드 설치"
+    echo "inspector에 transaction 체인코드 설치"
     setGlobals inspector
-    peer lifecycle chaincode install Package/transaction.tar.gz >&log.txt
-    # echo "Seller에 체인코드 설치"
-    # setGlobals seller
-    # peer lifecycle chaincode install Package/people.tar.gz >&log.txt
-    # cat log.txt
-    # echo "Buyer에 체인코드 설치"
-    # setGlobals buyer
-    # peer lifecycle chaincode install Package/people.tar.gz >&log.txt
-    # cat log.txt
-    # echo "inspector에 체인코드 설치"
-    # setGlobals inspector
-    # peer lifecycle chaincode install Package/revenue.tar.gz >&log.txt
-    # cat log.txt
+    peer lifecycle chaincodes install Package/transaction.tar.gz >&log.txt
+     echo "Seller에 inspection 체인코드 설치"
+     setGlobals seller
+     peer lifecycle chaincodes install Package/inspection.tar.gz >&log.txt
+     cat log.txt
+     echo "Buyer에 inspection 체인코드 설치"
+     setGlobals buyer
+     peer lifecycle chaincodes install Package/inspection.tar.gz >&log.txt
+     cat log.txt
+     echo "inspector에 inspection 체인코드 설치"
+     setGlobals inspector
+     peer lifecycle chaincodes install Package/inspection.tar.gz >&log.txt
+     cat log.txt
 }
 
 peer version

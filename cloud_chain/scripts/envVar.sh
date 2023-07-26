@@ -75,7 +75,7 @@ setGlobalsCLI() {
 }
 
 # parsePeerConnectionParameters $@
-# Helper function that sets the peer connection parameters for a chaincode
+# Helper function that sets the peer connection parameters for a chaincodes
 # operation
 parsePeerConnectionParameters() {
   PEER_CONN_PARMS=()
