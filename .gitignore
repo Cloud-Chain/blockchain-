@@ -1,0 +1,28 @@
+# Go binary
+/bin/
+
+# Go build
+/build/
+
+# Go test cache
+/.cache/
+
+# Go test coverage profile
+*.cover
+
+# Vendor directory
+/vendor/
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.tmproj
+
+# macOS-specific files
+.DS_Store
+
+# Windows-specific files
+Thumbs.db
+

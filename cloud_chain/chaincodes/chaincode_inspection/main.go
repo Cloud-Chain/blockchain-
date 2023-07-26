@@ -5,10 +5,9 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
-	"github.com/jhl8109/blockchain-event-trace-system/used_car/chaincode"
-	"log"
-
+	"chaincode"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+	"log"
 )
 
 func main() {
