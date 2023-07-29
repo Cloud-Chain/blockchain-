@@ -32,7 +32,7 @@ fi
 makeGenesisBlock(){
   CHANNEL_NAME="vehicles"
   FABRIC_CFG_PATH=${PWD}/configtx
-  set -x
+  # set -x
   configtxgen -profile people -outputBlock ./channel-artifacts/${CHANNEL_NAME}.block -channelID $CHANNEL_NAME
   FABRIC_CFG_PATH=$PWD/../config/
   osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7053 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
@@ -65,8 +65,8 @@ joinChannel() {
 setAnchorPeer() {
   CHANNEL_NAME=$1
   ORG=$2
-  echo "CONTAINER_CLI : $CONTAINER_CLI"
-  echo "ORG : $ORG"
+  # echo "CONTAINER_CLI : $CONTAINER_CLI"
+  # echo "ORG : $ORG"
   ${CONTAINER_CLI} exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME 
 }
 

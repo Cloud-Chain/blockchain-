@@ -30,10 +30,10 @@ createAnchorPeerUpdate() {
     errorln "Org${ORG} unknown"
   fi
 
-  set -x
+  # set -x
   # Modify the configuration to append the anchor peer 
   jq '.channel_group.groups.Application.groups.'${CORE_PEER_LOCALMSPID}'.values += {"AnchorPeers":{"mod_policy": "Admins","value":{"anchor_peers": [{"host": "'$HOST'","port": '$PORT'}]},"version": "0"}}' ${CORE_PEER_LOCALMSPID}config.json > ${CORE_PEER_LOCALMSPID}modified_config.json
-  { set +x; } 2>/dev/null
+  # { set +x; } 2>/dev/null
 
   # Compute a config update, based on the differences between 
   # {orgmsp}config.json and {orgmsp}modified_config.json, write
