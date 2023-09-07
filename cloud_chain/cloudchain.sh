@@ -45,7 +45,7 @@ function createOrgs() {
   if [ "$CRYPTO" == "cryptogen" ]; then
     which cryptogen
     if [ "$?" -ne 0 ]; then
-      fatalln "Cryptogen의 경로가 이상한듯"
+      fatalln "Cryptogen 오류"
     fi
 
     infoln "Cryptogen을 이용해서 암호화 파일을 생성"
@@ -137,7 +137,7 @@ function networkUp() {
   fi
   COMPOSE_FILES="-f compose/${COMPOSE_FILE_BASE} -f compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
   if [ "${DATABASE}" == "couchdb" ]; then
-    infoln "Couchdb 사용!"
+    infoln "Couchdb 사용"
     COMPOSE_FILES="${COMPOSE_FILES} -f compose/${COMPOSE_FILE_COUCH} -f compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_COUCH}"
   fi
   echo "${DOCKER_SOCK} & ${CONTAINER_CLI_COMPOSE} & ${COMPOSE_FILES}"
@@ -165,7 +165,7 @@ function networkDown() {
   rm -rf organizations/ordererOrganizations
   rm -rf organizations/peerOrganizations
   rm -rf channel-artifacts
-  rm -rf Package
+  rm -rf package
 }
 
 function setnetwork(){
