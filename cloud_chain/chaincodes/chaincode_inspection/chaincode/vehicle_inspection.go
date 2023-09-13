@@ -3,15 +3,19 @@ package chaincode
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+	"github.com/hyperledger/fabric/common/flogging"
 )
 
 type SmartContract struct {
 	contractapi.Contract
 }
+
+var logger = flogging.MustGetLogger("mychaincode")
 
 type Inspection struct {
 	ID                int64      `json:"id"`
@@ -62,7 +66,7 @@ type Images struct {
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	inspection := Inspection{
-		ID:             123456789,
+		ID:             0,
 		RequestDate:    "2023-07-01",
 		InspectionDate: "2023-07-26",
 		VehicleBasicInfo: BasicInfo{
@@ -119,20 +123,16 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 
 	return nil
 }
-func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, id string, basicInfo BasicInfo) (*Inspection, error) {
-	// lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
-	// lastID := int64(0)
-	// if lastInspectionID != nil {
-	// 	lastID, _ = strconv.ParseInt(string(lastInspectionID), 10, 64)
-	// } else {
-	// 	lastID = 0
-	// }
-	parsedID, err := strconv.ParseInt(id, 10, 64)
-	if err != nil {
-		panic(fmt.Errorf("failed to parse ID: %w", err))
+func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, basicInfo BasicInfo) (*Inspection, error) {
+	lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
+	lastID := int64(0)
+	if lastInspectionID != nil {
+		lastID, _ = strconv.ParseInt(string(lastInspectionID), 10, 64)
+	} else {
+		lastID = 0
 	}
 	inspection := Inspection{
-		ID:               parsedID,
+		ID:               lastID + 1,
 		RequestDate:      time.Now().Format("2006-01-02 15:04:05"),
 		InspectionDate:   "",
 		VehicleBasicInfo: basicInfo,
@@ -234,28 +234,40 @@ func (s *SmartContract) QueryInspectionResult(ctx contractapi.TransactionContext
 	return inspection, nil
 }
 
-func (s *SmartContract) QueryAllInspectionRequest(ctx contractapi.TransactionContextInterface) ([]Inspection, error) {
-	queryString := `{"selector":{"inspectionDate":""}}`
+func (s *SmartContract) QueryAllInspectionRequest(ctx contractapi.TransactionContextInterface) ([]*Inspection, error) {
+	queryString := fmt.Sprintf(`{
+		"selector": {
+			"_id": {
+				"$gt": null
+			}
+		}
+	}`)
 
 	resultsIterator, err := ctx.GetStub().GetQueryResult(queryString)
 	if err != nil {
+		logger.Errorf("Error querying data: %v", err)
 		return nil, err
 	}
 	defer resultsIterator.Close()
 
-	var inspections []Inspection
+	var inspections []*Inspection
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
+			logger.Errorf("Error reading query response: %v", err)
 			return nil, err
 		}
-		var inspection Inspection
-		if err = json.Unmarshal(queryResponse.Value, &inspection); err != nil {
+		var item Inspection
+		if err = json.Unmarshal(queryResponse.Value, &item); err != nil {
+			logger.Errorf("Error unmarshaling data: %v", err)
 			return nil, err
 		}
 
-		inspections = append(inspections, inspection)
+		inspections = append(inspections, &item)
 	}
+
+	// 로그에 데이터 기록
+	logger.Infof("Retrieved %d inspection records", len(inspections))
 
 	return inspections, nil
 }

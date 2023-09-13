@@ -116,7 +116,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 
 	return nil
 }
-func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface, transactionID int64, seller Participant, transactionDetails TransactionDetails) (*Transaction, error) {
+func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface, transactionID string, seller Participant, transactionDetails TransactionDetails) (*Transaction, error) {
 	// Assign new ID to the transaction
 	newTransactionDetails := TransactionDetails{
 		TransactionState:             "Selling",
@@ -131,8 +131,12 @@ func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface,
 		VehicleDeliveryAddress:       "",
 		Mileage:                      transactionDetails.Mileage,
 	}
+	parseID, err := strconv.ParseInt(transactionID, 10, 64)
+	if err != nil {
+		fmt.Errorf("Failed to parsing transactionID as int64. %s", err.Error())
+	}
 	transaction := Transaction{
-		ID:                 transactionID,
+		ID:                 parseID,
 		UploadDate:         time.Now().Format("2006-01-02 15:04:05"),
 		Assignor:           seller,
 		Assignee:           Participant{},

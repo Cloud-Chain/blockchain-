@@ -5,6 +5,7 @@ import (
 	"interface/config"
 	"interface/models"
 	"net/http"
+	"strconv"
 )
 
 /*
@@ -20,7 +21,7 @@ func RequestInspection(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
 		return
 	}
-	result := models.InspectRequest(request.ID, request.BasicInfo, config.SellerConfig)
+	result := models.InspectRequest(request.BasicInfo, config.SellerConfig)
 	c.IndentedJSON(http.StatusCreated, result)
 }
 
@@ -30,6 +31,20 @@ func ExecuteInspection(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
 		return
 	}
-	result := models.InspectRequest(request.ID, request.BasicInfo, config.SellerConfig)
-	c.IndentedJSON(http.StatusCreated, result)
+	result := models.InspectResult(request.ID, request.DetailInfo, request.Images, request.Etc, config.SellerConfig)
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func FindInspection(c *gin.Context) {
+	request, err := strconv.ParseInt(c.Query("id"), 10, 64)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+	}
+	result := models.QueryInspectResult(request, config.SellerConfig)
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func GetAllInspections(c *gin.Context) {
+	result := models.QueryAllInspectResult(config.SellerConfig)
+	c.IndentedJSON(http.StatusOK, result)
 }

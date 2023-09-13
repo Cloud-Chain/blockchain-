@@ -9,8 +9,10 @@ import (
 
 func SetupRouter(r *gin.Engine) {
 
+	models.TransactionInitLedger(config.SellerConfig)
+	models.InspectionInitLedger(config.SellerConfig)
+
 	//거래 라우팅 설정
-	models.InitLedger(config.SellerConfig)
 	tx := r.Group("/tx")
 	{
 		tx.GET("/", func(c *gin.Context) {
@@ -23,14 +25,10 @@ func SetupRouter(r *gin.Engine) {
 	//검수 라우팅 설정
 	ix := r.Group("/ix")
 	{
-		ix.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "inspection!",
-			})
-		})
-
+		ix.GET("/inspect", handlers.FindInspection)
 		ix.POST("/inspect", handlers.RequestInspection)
 		ix.PATCH("/inspect", handlers.ExecuteInspection)
+		ix.GET("/", handlers.GetAllInspections)
 	}
 
 	// 기타 라우팅 설정

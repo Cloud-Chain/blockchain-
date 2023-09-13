@@ -26,7 +26,7 @@ type PeerConfig struct {
 
 const (
 	CHANNEL_NAME              = "vehicles"
-	PROJECT_PATH              = "/home/jeho/blockchain-repo/cloud_chain/organizations/peerOrganizations"
+	PROJECT_PATH              = "/Users/jeho/Desktop/selab/graduate_project/blockchain-repo/cloud_chain/organizations/peerOrganizations"
 	INSPECTION_CONTRACT_NAME  = "inspection"
 	TRANSACTION_CONTRACT_NAME = "transaction"
 )
