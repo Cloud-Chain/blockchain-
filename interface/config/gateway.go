@@ -26,7 +26,7 @@ type PeerConfig struct {
 
 const (
 	CHANNEL_NAME              = "vehicles"
-	PROJECT_PATH              = "/Users/jeho/Desktop/selab/graduate_project/blockchain-repo/cloud_chain"
+	PROJECT_PATH              = "/home/jeho/blockchain-repo/cloud_chain/organizations/peerOrganizations"
 	INSPECTION_CONTRACT_NAME  = "inspection"
 	TRANSACTION_CONTRACT_NAME = "transaction"
 )
@@ -34,27 +34,27 @@ const (
 var (
 	SellerConfig = PeerConfig{
 		MSPID:        "sellerMSP",
-		CertPath:     PROJECT_PATH + "/users/User1@seller.example.com/msp/signcerts/User1@seller.example.com-cert.pem",
-		KeyPath:      PROJECT_PATH + "/users/User1@seller.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/peers/peer0.seller.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/seller.example.com" + "/users/User1@seller.example.com/msp/signcerts/User1@seller.example.com-cert.pem",
+		KeyPath:      PROJECT_PATH + "/seller.example.com" + "/users/User1@seller.example.com/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/seller.example.com" + "/peers/peer0.seller.example.com/tls/ca.crt",
 		PeerEndpoint: "localhost:7051",
 		GatewayPeer:  "peer0.seller.example.com",
 	}
 
 	BuyerConfig = PeerConfig{
 		MSPID:        "buyerMSP",
-		CertPath:     PROJECT_PATH + "/users/User1@buyer.example.com/msp/signcerts/User1@buyer.example.com-cert.pem",
-		KeyPath:      PROJECT_PATH + "/users/User1@buyer.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/peers/peer0.buyer.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/buyer.example.com" + "/users/User1@buyer.example.com/msp/signcerts/User1@buyer.example.com-cert.pem",
+		KeyPath:      PROJECT_PATH + "/buyer.example.com" + "/users/User1@buyer.example.com/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/buyer.example.com" + "/peers/peer0.buyer.example.com/tls/ca.crt",
 		PeerEndpoint: "localhost:9051", // Buyer 피어의 gRPC 엔드포인트
 		GatewayPeer:  "peer0.buyer.example.com",
 	}
 
 	InspectorConfig = PeerConfig{
 		MSPID:        "inspectorMSP",
-		CertPath:     PROJECT_PATH + "/users/User1@inspector.example.com/msp/signcerts/User1@inspector.example.com-cert.pem",
-		KeyPath:      PROJECT_PATH + "/users/User1@inspector.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/peers/peer0.inspector.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/inspector.example.com" + "/users/Admin@inspector.example.com/msp/signcerts/Admin@inspector.example.com-cert.pem",
+		KeyPath:      PROJECT_PATH + "/inspector.example.com" + "/users/Admin@inspector.example.com/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/inspector.example.com" + "/peers/peer0.inspector.example.com/tls/ca.crt",
 		PeerEndpoint: "localhost:11051", // Inspector 피어의 gRPC 엔드포인트
 		GatewayPeer:  "peer0.inspector.example.com",
 	}

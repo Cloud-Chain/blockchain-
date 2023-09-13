@@ -119,17 +119,20 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 
 	return nil
 }
-func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, id int64, basicInfo BasicInfo) (*Inspection, error) {
-	lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
-	lastID := int64(0)
-	if lastInspectionID != nil {
-		lastID, _ = strconv.ParseInt(string(lastInspectionID), 10, 64)
-	} else {
-		lastID = 0
+func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, id string, basicInfo BasicInfo) (*Inspection, error) {
+	// lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
+	// lastID := int64(0)
+	// if lastInspectionID != nil {
+	// 	lastID, _ = strconv.ParseInt(string(lastInspectionID), 10, 64)
+	// } else {
+	// 	lastID = 0
+	// }
+	parsedID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		panic(fmt.Errorf("failed to parse ID: %w", err))
 	}
-
 	inspection := Inspection{
-		ID:               lastID + 1,
+		ID:               parsedID,
 		RequestDate:      time.Now().Format("2006-01-02 15:04:05"),
 		InspectionDate:   "",
 		VehicleBasicInfo: basicInfo,
