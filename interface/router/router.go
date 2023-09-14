@@ -15,11 +15,14 @@ func SetupRouter(r *gin.Engine) {
 	//거래 라우팅 설정
 	tx := r.Group("/tx")
 	{
-		tx.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "Hello, World!",
-			})
-		})
+		tx.POST("/sell", handlers.SellVehicle)
+		tx.POST("/buy", handlers.BuyVehicle)
+		tx.PATCH("/seller/compromise", handlers.SellerCompromiseTransaction)
+		tx.PATCH("/buyer/compromise", handlers.BuyerCompromiseTransaction)
+		tx.GET("/id", handlers.ReadTransaction)
+		tx.GET("/user", handlers.QueryTransactionsByUser)
+		tx.GET("/vehicle", handlers.QueryTransactionsByVehicle)
+		tx.GET("/", handlers.QueryAllTransactions)
 	}
 
 	//검수 라우팅 설정

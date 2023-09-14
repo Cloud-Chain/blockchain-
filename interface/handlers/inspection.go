@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"interface/config"
 	"interface/models"
 	"net/http"
-	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 /*
@@ -31,20 +31,21 @@ func ExecuteInspection(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
 		return
 	}
-	result := models.InspectResult(request.ID, request.DetailInfo, request.Images, request.Etc, config.SellerConfig)
+	result := models.InspectResult(request.ID, request.DetailInfo, request.Images, request.Etc, config.InspectorConfig)
 	c.IndentedJSON(http.StatusOK, result)
 }
 
 func FindInspection(c *gin.Context) {
-	request, err := strconv.ParseInt(c.Query("id"), 10, 64)
-	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
-	}
-	result := models.QueryInspectResult(request, config.SellerConfig)
+	// request, err := strconv.ParseInt(c.Query("id"), 10, 64)
+	// if err != nil {
+	// 	c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+	// }
+	request := c.Query("id")
+	result := models.QueryInspectResult(request, config.InspectorConfig)
 	c.IndentedJSON(http.StatusOK, result)
 }
 
 func GetAllInspections(c *gin.Context) {
-	result := models.QueryAllInspectResult(config.SellerConfig)
+	result := models.QueryAllInspections(config.InspectorConfig)
 	c.IndentedJSON(http.StatusOK, result)
 }

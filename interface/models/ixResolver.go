@@ -3,9 +3,10 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hyperledger/fabric-gateway/pkg/client"
 	"interface/config"
 	"strconv"
+
+	"github.com/hyperledger/fabric-gateway/pkg/client"
 )
 
 /*
@@ -15,19 +16,6 @@ InspectResult - inspectionID string, detailInfo DetailInfo, images Images, etc s
 QueryInspectionResult - inspectionID string
 QueryAllInspectionRequest
 */
-func TransactionInitLedger(pc config.PeerConfig) {
-	_, commit, err := pc.TransactionContract.SubmitAsync("InitLedger")
-	status, err := commit.Status()
-	if err != nil {
-		panic(fmt.Errorf("failed to get Transaction InitLedger transaction commit status: %w", err))
-	}
-
-	if !status.Successful {
-		panic(fmt.Errorf("failed to commit Transaction InitLedger transaction with status code %v", status.Code))
-	}
-
-	fmt.Println("\n*** Transaction InitLedger committed successfully")
-}
 func InspectionInitLedger(pc config.PeerConfig) {
 	_, commit, err := pc.InspectionContract.SubmitAsync("InitLedger")
 	status, err := commit.Status()
@@ -98,8 +86,8 @@ func InspectResult(id int64, detailInfo DetailInfo, images Images, etc string, p
 	return resultStruct
 }
 
-func QueryInspectResult(id int64, pc config.PeerConfig) Inspection {
-	result, err := pc.InspectionContract.EvaluateTransaction("QueryInspectionResult", strconv.FormatInt(id, 10))
+func QueryInspectResult(id string, pc config.PeerConfig) Inspection {
+	result, err := pc.InspectionContract.EvaluateTransaction("QueryInspectionResult", id)
 	if err != nil {
 		panic(fmt.Errorf("failed to query QueryInspectionResult: %w", err))
 	}
@@ -116,13 +104,13 @@ func QueryInspectResult(id int64, pc config.PeerConfig) Inspection {
 	return resultStruct
 }
 
-func QueryAllInspectResult(pc config.PeerConfig) []Inspection {
-	result, err := pc.InspectionContract.EvaluateTransaction("QueryAllInspectionRequest")
+func QueryAllInspections(pc config.PeerConfig) []Inspection {
+	result, err := pc.InspectionContract.EvaluateTransaction("QueryAllInspections")
 	if err != nil {
-		panic(fmt.Errorf("failed to query QueryAllInspectionRequest: %w", err))
+		panic(fmt.Errorf("failed to query QueryAllInspections: %w", err))
 	}
 
-	fmt.Println("\n*** QueryAllInspectionRequest successful")
+	fmt.Println("\n*** QueryAllInspections successful")
 	fmt.Printf("resultJSON : %s \n", result)
 
 	var resultStruct []Inspection
