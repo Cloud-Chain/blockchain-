@@ -8,17 +8,14 @@ import (
 	"time"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
-	"github.com/hyperledger/fabric/common/flogging"
 )
 
 type SmartContract struct {
 	contractapi.Contract
 }
 
-var logger = flogging.MustGetLogger("mychaincode")
-
 type Inspection struct {
-	ID                int64      `json:"id"`
+	ID                int        `json:"id"`
 	RequestDate       string     `json:"requestDate"`
 	InspectionDate    string     `json:"inspectionDate"`
 	VehicleBasicInfo  BasicInfo  `json:"vehicleBasicInfo"`
@@ -112,11 +109,11 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		return err
 	}
 
-	err = ctx.GetStub().PutState(strconv.FormatInt(inspection.ID, 10), inspectionJSON)
+	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), inspectionJSON)
 	if err != nil {
 		return fmt.Errorf("failed to put to world state: %v", err)
 	}
-	err = ctx.GetStub().PutState("lastInspectionID", []byte(strconv.FormatInt(inspection.ID, 10)))
+	err = ctx.GetStub().PutState("lastInspectionID", []byte(strconv.Itoa(inspection.ID)))
 	if err != nil {
 		return fmt.Errorf("Failed to update lastInspectionID in world state: %s", err.Error())
 	}
@@ -125,9 +122,9 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 }
 func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, basicInfo BasicInfo) (*Inspection, error) {
 	lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
-	lastID := int64(0)
+	lastID := int(0)
 	if lastInspectionID != nil {
-		lastID, _ = strconv.ParseInt(string(lastInspectionID), 10, 64)
+		lastID, _ = strconv.Atoi(string(lastInspectionID))
 	} else {
 		lastID = 0
 	}
@@ -169,52 +166,19 @@ func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterfa
 		return nil, fmt.Errorf("Failed to marshaling transaction as bytes. %s", err.Error())
 	}
 
-	err = ctx.GetStub().PutState(strconv.FormatInt(inspection.ID, 10), inspectionAsBytes)
+	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), inspectionAsBytes)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to put transaction to world state. %s", err.Error())
 	}
 	if err != nil {
 		log.Println(err.Error())
 	}
-	err = ctx.GetStub().PutState("lastInspectionID", []byte(strconv.FormatInt(inspection.ID, 10)))
+	err = ctx.GetStub().PutState("lastInspectionID", []byte(strconv.Itoa(inspection.ID)))
 	if err != nil {
 		return nil, fmt.Errorf("Failed to update lastInspectionID in world state: %s", err.Error())
 	}
 
 	return &inspection, nil
-}
-
-func (s *SmartContract) InspectResult(
-	ctx contractapi.TransactionContextInterface, inspectionID string, detailInfo DetailInfo, images Images, etc string) (*Inspection, error) {
-
-	originInspectionData, err := ctx.GetStub().GetState(inspectionID)
-
-	if err != nil {
-		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
-	}
-
-	if originInspectionData == nil {
-		return nil, fmt.Errorf("%s does not exist", inspectionID)
-	}
-
-	inspection := new(Inspection)
-	_ = json.Unmarshal(originInspectionData, inspection)
-
-	if inspection.InspectionDate != "" {
-		return nil, fmt.Errorf("%s is already inspected", inspectionID)
-	}
-	inspection.InspectionDate = time.Now().Format("2006-01-02 15:04:05")
-	inspection.Images = images
-	inspection.VehicleDetailInfo = detailInfo
-	inspection.Etc = etc
-
-	newInspectionData, _ := json.Marshal(inspection)
-	err = ctx.GetStub().PutState(strconv.FormatInt(inspection.ID, 10), newInspectionData)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
-	}
-
-	return inspection, nil
 }
 
 func (s *SmartContract) QueryInspectionResult(ctx contractapi.TransactionContextInterface, inspectionID string) (*Inspection, error) {
@@ -234,40 +198,75 @@ func (s *SmartContract) QueryInspectionResult(ctx contractapi.TransactionContext
 	return inspection, nil
 }
 
-func (s *SmartContract) QueryAllInspectionRequest(ctx contractapi.TransactionContextInterface) ([]*Inspection, error) {
-	queryString := fmt.Sprintf(`{
+func (s *SmartContract) InspectResult(
+	ctx contractapi.TransactionContextInterface, inspectionID string, detailInfo DetailInfo, images Images, etc string) (*Inspection, error) {
+
+	originInspectionData, err := ctx.GetStub().GetState(inspectionID)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
+	}
+
+	if originInspectionData == nil {
+		return nil, fmt.Errorf("%s does not exist", inspectionID)
+	}
+
+	inspection := new(Inspection)
+	err = json.Unmarshal(originInspectionData, inspection)
+	if err != nil {
+		fmt.Errorf("+v\n", err)
+	}
+
+	if inspection.InspectionDate != "" {
+		return nil, fmt.Errorf("%s is already inspected", inspectionID)
+	}
+	inspection.InspectionDate = time.Now().Format("2006-01-02 15:04:05")
+	inspection.Images = images
+	inspection.VehicleDetailInfo = detailInfo
+	inspection.Etc = etc
+
+	newInspectionData, _ := json.Marshal(inspection)
+	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), newInspectionData)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
+	}
+
+	return inspection, nil
+}
+
+func (s *SmartContract) QueryAllInspections(ctx contractapi.TransactionContextInterface) ([]Inspection, error) {
+	queryString := `{
 		"selector": {
-			"_id": {
-				"$gt": null
-			}
+		   "vehicleBasicInfo.mileage": {
+			  "$gte": 0
+		   }
 		}
-	}`)
+	 }`
 
 	resultsIterator, err := ctx.GetStub().GetQueryResult(queryString)
 	if err != nil {
-		logger.Errorf("Error querying data: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("Failed to get query result: %s", err.Error())
 	}
 	defer resultsIterator.Close()
 
-	var inspections []*Inspection
+	inspections := []Inspection{}
+
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
-			logger.Errorf("Error reading query response: %v", err)
 			return nil, err
 		}
-		var item Inspection
-		if err = json.Unmarshal(queryResponse.Value, &item); err != nil {
-			logger.Errorf("Error unmarshaling data: %v", err)
-			return nil, err
+		var inspection Inspection
+
+		err = json.Unmarshal(queryResponse.Value, &inspection)
+		if err != nil {
+			fmt.Printf("Unmarshal Error : %+v , %+v \n", queryResponse.Value, err)
+			// return nil, err
 		}
 
-		inspections = append(inspections, &item)
+		inspections = append(inspections, inspection)
+		fmt.Printf("%+v \n", queryResponse.Value)
+		fmt.Printf("%+v \n", inspection)
 	}
-
-	// 로그에 데이터 기록
-	logger.Infof("Retrieved %d inspection records", len(inspections))
-
 	return inspections, nil
 }

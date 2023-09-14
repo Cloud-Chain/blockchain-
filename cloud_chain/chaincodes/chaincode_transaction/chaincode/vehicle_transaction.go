@@ -341,8 +341,10 @@ func (s *SmartContract) QueryAllTransactions(ctx contractapi.TransactionContextI
 		if err = json.Unmarshal(queryResponse.Value, &transaction); err != nil {
 			return nil, err
 		}
-
+		fmt.Printf("%v\n", transaction)
+		fmt.Printf("%v\n", transactions)
 		transactions = append(transactions, transaction)
+		fmt.Printf("%v\n", transactions)
 	}
 
 	return transactions, nil
