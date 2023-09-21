@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"interface/config"
 	"interface/models"
+	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 /*
@@ -16,8 +19,15 @@ QueryAllInspectionRequest
 */
 func SellVehicle(c *gin.Context) {
 	var request models.Transaction
+	org := c.GetHeader("org")
+	userID := c.GetHeader("userID")
+	cert := c.GetHeader("CA-User")
 	if err := c.BindJSON(&request); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+	if !checkCertForTransaction(org, userID, cert) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
 	result := models.SellVehicle(request.ID, request.Assignor, request.TransactionDetails, config.SellerConfig)
@@ -25,8 +35,15 @@ func SellVehicle(c *gin.Context) {
 }
 func BuyVehicle(c *gin.Context) {
 	var request models.Transaction
+	org := c.GetHeader("org")
+	userID := c.GetHeader("userID")
+	cert := c.GetHeader("CA-User")
 	if err := c.BindJSON(&request); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+	if !checkCertForTransaction(org, userID, cert) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
 	result := models.BuyVehicle(request.ID, request.Assignee, request.TransactionDetails, config.BuyerConfig)
@@ -34,8 +51,15 @@ func BuyVehicle(c *gin.Context) {
 }
 func SellerCompromiseTransaction(c *gin.Context) {
 	var request models.Transaction
+	org := c.GetHeader("org")
+	userID := c.GetHeader("userID")
+	cert := c.GetHeader("CA-User")
 	if err := c.BindJSON(&request); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+	if !checkCertForTransaction(org, userID, cert) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
 	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.SellerConfig)
@@ -43,8 +67,15 @@ func SellerCompromiseTransaction(c *gin.Context) {
 }
 func BuyerCompromiseTransaction(c *gin.Context) {
 	var request models.Transaction
+	org := c.GetHeader("org")
+	userID := c.GetHeader("userID")
+	cert := c.GetHeader("CA-User")
 	if err := c.BindJSON(&request); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
+		return
+	}
+	if !checkCertForTransaction(org, userID, cert) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
 	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.BuyerConfig)
@@ -68,4 +99,23 @@ func QueryTransactionsByVehicle(c *gin.Context) {
 func QueryAllTransactions(c *gin.Context) {
 	result := models.QueryAllTransactions(config.InspectorConfig)
 	c.IndentedJSON(http.StatusOK, result)
+}
+func checkCertForTransaction(org, userID, cert string) bool {
+	certPath := fmt.Sprintf("%s/%s.example.com/users/%s@%s.example.com/msp/signcerts/cert.pem", config.PROJECT_PATH, org, userID, org)
+
+	// 파일 읽기
+	fileContent, err := ioutil.ReadFile(certPath)
+
+	// 모든 개행 문자를 제거
+	convertedUserCert := strings.ReplaceAll(cert, "\n", "")
+	convertedUserCert = strings.ReplaceAll(cert, "\\n", "")
+	convertedFileCert := strings.ReplaceAll(string(fileContent), "\n", "")
+	fmt.Println("cert : " + convertedUserCert)
+	fmt.Println("file : " + convertedFileCert)
+	if err != nil {
+		return false
+	} else if convertedFileCert != convertedUserCert {
+		return false
+	}
+	return true
 }
