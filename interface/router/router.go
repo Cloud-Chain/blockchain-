@@ -36,6 +36,16 @@ func SetupRouter(r *gin.Engine) {
 
 	// 기타 라우팅 설정
 	// 루트 URL에 대한 핸들러 등록
+	cert := r.Group("/cert")
+	{
+
+		cert.POST("/enroll", handlers.Enroll) // 인증서 발급
+		cert.POST("/re-enroll")               // 인증서 재발급
+
+	}
+
+	// 기타 라우팅 설정
+	// 루트 URL에 대한 핸들러 등록
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "transaction",
