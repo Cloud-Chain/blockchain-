@@ -3,10 +3,8 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"interface/config"
-	"strconv"
-
 	"github.com/hyperledger/fabric-gateway/pkg/client"
+	"interface/config"
 )
 
 /*
@@ -57,11 +55,12 @@ func InspectRequest(basicInfo BasicInfo, pc config.PeerConfig) Inspection {
 	return resultStruct
 }
 
-func InspectResult(id int64, detailInfo DetailInfo, images Images, etc string, pc config.PeerConfig) Inspection {
-	detailInfoJSON, err := json.Marshal(detailInfo)
-	imagesJSON, err := json.Marshal(images)
+func InspectResult(inspection Inspection, pc config.PeerConfig) Inspection {
+	inspectionJSON, err := json.Marshal(inspection)
+	//detailInfoJSON, err := json.Marshal(detailInfo)
+	//imagesJSON, err := json.Marshal(images)
 	result, commit, err := pc.InspectionContract.SubmitAsync("InspectResult",
-		client.WithArguments(strconv.FormatInt(id, 10), string(detailInfoJSON), string(imagesJSON), etc))
+		client.WithArguments(string(inspectionJSON)))
 	if err != nil {
 		panic(fmt.Errorf("failed to submit InspectResult transaction: %w", err))
 	}

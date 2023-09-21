@@ -31,7 +31,7 @@ func ExecuteInspection(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
 		return
 	}
-	result := models.InspectResult(request.ID, request.DetailInfo, request.Images, request.Etc, config.InspectorConfig)
+	result := models.InspectResult(request, config.InspectorConfig)
 	c.IndentedJSON(http.StatusOK, result)
 }
 

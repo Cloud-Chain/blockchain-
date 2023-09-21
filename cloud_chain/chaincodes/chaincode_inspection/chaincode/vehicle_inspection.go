@@ -16,6 +16,7 @@ type SmartContract struct {
 
 type Inspection struct {
 	ID                int        `json:"id"`
+	InspectionStatus  bool       `json:"inspectionStatus"`
 	RequestDate       string     `json:"requestDate"`
 	InspectionDate    string     `json:"inspectionDate"`
 	VehicleBasicInfo  BasicInfo  `json:"vehicleBasicInfo"`
@@ -63,9 +64,10 @@ type Images struct {
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	inspection := Inspection{
-		ID:             0,
-		RequestDate:    "2023-07-01",
-		InspectionDate: "2023-07-26",
+		ID:               0,
+		InspectionStatus: false,
+		RequestDate:      "2023-07-01",
+		InspectionDate:   "2023-07-26",
 		VehicleBasicInfo: BasicInfo{
 			VehicleIdentificationNumber: "1HGCM82633A123456",
 			VehicleModelName:            "Toyota Camry",
@@ -130,6 +132,7 @@ func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterfa
 	}
 	inspection := Inspection{
 		ID:               lastID + 1,
+		InspectionStatus: false,
 		RequestDate:      time.Now().Format("2006-01-02 15:04:05"),
 		InspectionDate:   "",
 		VehicleBasicInfo: basicInfo,
@@ -198,7 +201,25 @@ func (s *SmartContract) QueryInspectionResult(ctx contractapi.TransactionContext
 	return inspection, nil
 }
 
-func (s *SmartContract) InspectResult(
+func (s *SmartContract) InspectResult(ctx contractapi.TransactionContextInterface, inspection Inspection) (*Inspection, error) {
+	inspection.InspectionStatus = true
+	inspection.RequestDate = time.Now().Format("2006-01-02 15:04:05")
+
+	inspectionAsBytes, err := json.Marshal(inspection)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to marshaling transaction as bytes. %s", err.Error())
+	}
+	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), inspectionAsBytes)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to put transaction to world state. %s", err.Error())
+	}
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return &inspection, nil
+}
+
+func (s *SmartContract) InspectResult2(
 	ctx contractapi.TransactionContextInterface, inspectionID string, detailInfo DetailInfo, images Images, etc string) (*Inspection, error) {
 
 	originInspectionData, err := ctx.GetStub().GetState(inspectionID)
@@ -220,6 +241,7 @@ func (s *SmartContract) InspectResult(
 	if inspection.InspectionDate != "" {
 		return nil, fmt.Errorf("%s is already inspected", inspectionID)
 	}
+	inspection.InspectionStatus = true
 	inspection.InspectionDate = time.Now().Format("2006-01-02 15:04:05")
 	inspection.Images = images
 	inspection.VehicleDetailInfo = detailInfo

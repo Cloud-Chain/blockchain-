@@ -1,12 +1,14 @@
 package models
 
 type Inspection struct {
-	ID             int64      `json:"id"`
-	InspectionDate string     `json:"inspectionDate"`
-	BasicInfo      BasicInfo  `json:"vehicleBasicInfo"`
-	DetailInfo     DetailInfo `json:"vehicleDetailInfo"`
-	Images         Images     `json:"images"`
-	Etc            string     `json:"etc"`
+	ID               int64      `json:"id"`
+	InspectionStatus bool       `json:"inspectionStatus"`
+	RequestDate      string     `json:"requestDate"`
+	InspectionDate   string     `json:"inspectionDate"`
+	BasicInfo        BasicInfo  `json:"vehicleBasicInfo"`
+	DetailInfo       DetailInfo `json:"vehicleDetailInfo"`
+	Images           Images     `json:"images"`
+	Etc              string     `json:"etc"`
 }
 
 type BasicInfo struct {
