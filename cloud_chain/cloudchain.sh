@@ -89,6 +89,41 @@ function createOrgs() {
 
   fi
 
+  # Create crypto material using Fabric CA
+  infoln $CRYPTO
+  if [ "$CRYPTO" == "Certificate Authorities" ]; then
+    infoln "Generating certificates using Fabric CA"
+    ${CONTAINER_CLI_COMPOSE} -f compose/$COMPOSE_FILE_CA -f compose/$CONTAINER_CLI/${CONTAINER_CLI}-$COMPOSE_FILE_CA up -d 2>&1
+
+    . organizations/fabric-ca/registerEnroll.sh
+
+    while :
+    do
+      if [ ! -f "organizations/fabric-ca/seller/ca-cert.pem" ]; then
+        sleep 1
+      else
+        break
+      fi
+    done
+
+    infoln "Creating Seller Identities"
+
+    createSeller
+
+    infoln "Creating Buyer Identities"
+
+    createBuyer
+
+    infoln "Creating Inspector Identities"
+
+    createInspector
+
+    infoln "Creating Orderer Org Identities"
+
+    createOrderer
+
+  fi
+
   infoln "Generating CCP files for seller, buyer and inspector"
   ./organizations/ccp-generate.sh
 }
@@ -127,6 +162,27 @@ function checkPrereqs() {
       fatalln "Fabric Docker image version of $DOCKER_IMAGE_VERSION does not match the versions supported by the test network."
     fi
   done
+
+  ## Check for fabric-ca
+  if [ "$CRYPTO" == "Certificate Authorities" ]; then
+
+    fabric-ca-client version > /dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+      errorln "fabric-ca-client binary not found.."
+      errorln
+      errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
+      errorln "https://hyperledger-fabric.readthedocs.io/en/latest/install.html"
+      exit 1
+    fi
+    CA_LOCAL_VERSION=$(fabric-ca-client version | sed -ne 's/ Version: //p')
+    CA_DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-ca:1.5.7 fabric-ca-client version | sed -ne 's/ Version: //p' | head -1)
+    infoln "CA_LOCAL_VERSION=$CA_LOCAL_VERSION"
+    infoln "CA_DOCKER_IMAGE_VERSION=$CA_DOCKER_IMAGE_VERSION"
+
+    if [ "$CA_LOCAL_VERSION" != "$CA_DOCKER_IMAGE_VERSION" ]; then
+      warnln "Local fabric-ca binaries and docker images are out of sync. This may cause problems."
+    fi
+  fi
 }
 
 function networkUp() {
@@ -161,7 +217,10 @@ function networkDown() {
   else
     fatalln "Container CLI  ${CONTAINER_CLI} not supported"
   fi
-
+  rm -rf organizations/fabric-ca/seller/msp organizations/fabric-ca/seller/tls-cert.pem organizations/fabric-ca/seller/ca-cert.pem organizations/fabric-ca/seller/IssuerPublicKey organizations/fabric-ca/seller/IssuerRevocationPublicKey organizations/fabric-ca/seller/fabric-ca-server.db
+  rm -rf organizations/fabric-ca/buyer/msp organizations/fabric-ca/buyer/tls-cert.pem organizations/fabric-ca/buyer/ca-cert.pem organizations/fabric-ca/buyer/IssuerPublicKey organizations/fabric-ca/buyer/IssuerRevocationPublicKey organizations/fabric-ca/buyer/fabric-ca-server.db
+  rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db
+  rm -rf organizations/fabric-ca/inspector/msp organizations/fabric-ca/inspector/tls-cert.pem organizations/fabric-ca/inspector/ca-cert.pem organizations/fabric-ca/inspector/IssuerPublicKey organizations/fabric-ca/inspector/IssuerRevocationPublicKey organizations/fabric-ca/inspector/fabric-ca-server.db
   rm -rf organizations/ordererOrganizations
   rm -rf organizations/peerOrganizations
   rm -rf channel-artifacts
@@ -273,7 +332,7 @@ if [ "$MODE" == "up" ]; then
   networkUp
 elif [ "$MODE" == "crypto" ]; then
   infoln "암호화 실행"
-  createOrgs
+  http
 elif [ "$MODE" == "down" ]; then
   infoln "네트워크 내리고 도커 이미지까지 제거"
   networkDown
