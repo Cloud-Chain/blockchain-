@@ -164,6 +164,7 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.inspector.example.com:11051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.inspector.example.com:11051
       - CORE_PEER_LOCALMSPID=inspectorMSP
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.inspector.example.com:9446
       - CORE_METRICS_PROVIDER=prometheus
       #이부분 바꿈 peerOseller -> peerOinspector
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0inspector"}
@@ -175,6 +176,7 @@ services:
     command: peer node start
     ports:
       - 11051:11051
+      - 9446:9446
     networks:
       - test
 
