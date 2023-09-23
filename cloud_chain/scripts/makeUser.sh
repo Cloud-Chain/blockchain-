@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_PATH=/Users/jeho/Desktop/selab/graduate_project/blockchain-repo/cloud_chain
+PROJECT_PATH=/home/jeho/blockchain-repo/cloud_chain
 ORG=$1
 ID=$2
 PW=$3
