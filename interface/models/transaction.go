@@ -22,9 +22,9 @@ type TransactionDetails struct {
 	VehicleModelName             string `json:"vehicleModelName"`
 	VehicleIdentificationNumber  string `json:"vehicleIdentificationNumber"`
 	TransactionDate              string `json:"transactionDate"`
-	TransactionAmount            string `json:"transactionAmount"`
+	TransactionAmount            int `json:"transactionAmount"`
 	BalancePaymentDate           string `json:"balancePaymentDate"`
 	VehicleDeliveryDate          string `json:"vehicleDeliveryDate"`
 	VehicleDeliveryAddress       string `json:"vehicleDeliveryAddress"`
-	Mileage                      string `json:"mileage"`
+	Mileage                      int `json:"mileage"`
 }

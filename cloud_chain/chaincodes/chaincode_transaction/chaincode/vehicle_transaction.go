@@ -36,11 +36,11 @@ type TransactionDetails struct {
 	VehicleModelName             string `json:"vehicleModelName"`
 	VehicleIdentificationNumber  string `json:"vehicleIdentificationNumber"`
 	TransactionDate              string `json:"transactionDate"`
-	TransactionAmount            string `json:"transactionAmount"`
+	TransactionAmount            int `json:"transactionAmount"`
 	BalancePaymentDate           string `json:"balancePaymentDate"`
 	VehicleDeliveryDate          string `json:"vehicleDeliveryDate"`
 	VehicleDeliveryAddress       string `json:"vehicleDeliveryAddress"`
-	Mileage                      string `json:"mileage"`
+	Mileage                      int `json:"mileage"`
 }
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
@@ -57,11 +57,11 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 				VehicleModelName:             "Tesla Model A - 1111",
 				VehicleIdentificationNumber:  "5YJ3E1EA1JF11111",
 				TransactionDate:              "",
-				TransactionAmount:            "10000",
+				TransactionAmount:            10000,
 				BalancePaymentDate:           "",
 				VehicleDeliveryDate:          "",
 				VehicleDeliveryAddress:       "",
-				Mileage:                      "10000",
+				Mileage:                      10000,
 			},
 		},
 		{
@@ -76,11 +76,11 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 				VehicleModelName:             "Tesla Model S - 2222",
 				VehicleIdentificationNumber:  "5YJ3E1EA1JF22222",
 				TransactionDate:              "",
-				TransactionAmount:            "10000",
+				TransactionAmount:            10000,
 				BalancePaymentDate:           "",
 				VehicleDeliveryDate:          "",
 				VehicleDeliveryAddress:       "",
-				Mileage:                      "20000",
+				Mileage:                      20000,
 			},
 		},
 		{
@@ -95,11 +95,11 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 				VehicleModelName:             "Tesla Model S - 3333",
 				VehicleIdentificationNumber:  "5YJ3E1EA1JF33333",
 				TransactionDate:              "2023-06-25 00:00:00",
-				TransactionAmount:            "1000",
+				TransactionAmount:            1000,
 				BalancePaymentDate:           "2023-06-27 00:00:00",
 				VehicleDeliveryDate:          "2023-06-27 00:00:00",
 				VehicleDeliveryAddress:       "4444 TEST St",
-				Mileage:                      "30000",
+				Mileage:                      30000,
 			},
 		},
 		// Add more transactions if required...
