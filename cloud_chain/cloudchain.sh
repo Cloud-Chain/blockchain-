@@ -217,10 +217,10 @@ function networkDown() {
   else
     fatalln "Container CLI  ${CONTAINER_CLI} not supported"
   fi
-  rm -rf organizations/fabric-ca/seller/msp organizations/fabric-ca/seller/tls-cert.pem organizations/fabric-ca/seller/ca-cert.pem organizations/fabric-ca/seller/IssuerPublicKey organizations/fabric-ca/seller/IssuerRevocationPublicKey organizations/fabric-ca/seller/fabric-ca-server.db
-  rm -rf organizations/fabric-ca/buyer/msp organizations/fabric-ca/buyer/tls-cert.pem organizations/fabric-ca/buyer/ca-cert.pem organizations/fabric-ca/buyer/IssuerPublicKey organizations/fabric-ca/buyer/IssuerRevocationPublicKey organizations/fabric-ca/buyer/fabric-ca-server.db
-  rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db
-  rm -rf organizations/fabric-ca/inspector/msp organizations/fabric-ca/inspector/tls-cert.pem organizations/fabric-ca/inspector/ca-cert.pem organizations/fabric-ca/inspector/IssuerPublicKey organizations/fabric-ca/inspector/IssuerRevocationPublicKey organizations/fabric-ca/inspector/fabric-ca-server.db
+  sudo rm -rf organizations/fabric-ca/seller/msp organizations/fabric-ca/seller/tls-cert.pem organizations/fabric-ca/seller/ca-cert.pem organizations/fabric-ca/seller/IssuerPublicKey organizations/fabric-ca/seller/IssuerRevocationPublicKey organizations/fabric-ca/seller/fabric-ca-server.db
+  sudo rm -rf organizations/fabric-ca/buyer/msp organizations/fabric-ca/buyer/tls-cert.pem organizations/fabric-ca/buyer/ca-cert.pem organizations/fabric-ca/buyer/IssuerPublicKey organizations/fabric-ca/buyer/IssuerRevocationPublicKey organizations/fabric-ca/buyer/fabric-ca-server.db
+  sudo rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db
+  sudo rm -rf organizations/fabric-ca/inspector/msp organizations/fabric-ca/inspector/tls-cert.pem organizations/fabric-ca/inspector/ca-cert.pem organizations/fabric-ca/inspector/IssuerPublicKey organizations/fabric-ca/inspector/IssuerRevocationPublicKey organizations/fabric-ca/inspector/fabric-ca-server.db
   rm -rf organizations/ordererOrganizations
   rm -rf organizations/peerOrganizations
   rm -rf channel-artifacts
