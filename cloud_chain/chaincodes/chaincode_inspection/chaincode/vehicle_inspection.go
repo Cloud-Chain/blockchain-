@@ -131,7 +131,7 @@ func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterfa
 		lastID = 0
 	}
 	inspection := Inspection{
-		ID:               lastID + 1,
+		ID:               lastID+1,
 		InspectionStatus: false,
 		RequestDate:      time.Now().Format("2006-01-02 15:04:05"),
 		InspectionDate:   "",
@@ -219,42 +219,42 @@ func (s *SmartContract) InspectResult(ctx contractapi.TransactionContextInterfac
 	return &inspection, nil
 }
 
-func (s *SmartContract) InspectResult2(
-	ctx contractapi.TransactionContextInterface, inspectionID string, detailInfo DetailInfo, images Images, etc string) (*Inspection, error) {
+// func (s *SmartContract) InspectResult(
+// 	ctx contractapi.TransactionContextInterface, inspectionID string, detailInfo DetailInfo, images Images, etc string) (*Inspection, error) {
 
-	originInspectionData, err := ctx.GetStub().GetState(inspectionID)
+// 	originInspectionData, err := ctx.GetStub().GetState(inspectionID)
 
-	if err != nil {
-		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
-	}
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
+// 	}
 
-	if originInspectionData == nil {
-		return nil, fmt.Errorf("%s does not exist", inspectionID)
-	}
+// 	if originInspectionData == nil {
+// 		return nil, fmt.Errorf("%s does not exist", inspectionID)
+// 	}
 
-	inspection := new(Inspection)
-	err = json.Unmarshal(originInspectionData, inspection)
-	if err != nil {
-		fmt.Errorf("+v\n", err)
-	}
+// 	inspection := new(Inspection)
+// 	err = json.Unmarshal(originInspectionData, inspection)
+// 	if err != nil {
+// 		fmt.Errorf("+v\n", err)
+// 	}
 
-	if inspection.InspectionDate != "" {
-		return nil, fmt.Errorf("%s is already inspected", inspectionID)
-	}
-	inspection.InspectionStatus = true
-	inspection.InspectionDate = time.Now().Format("2006-01-02 15:04:05")
-	inspection.Images = images
-	inspection.VehicleDetailInfo = detailInfo
-	inspection.Etc = etc
+// 	if inspection.InspectionDate != "" {
+// 		return nil, fmt.Errorf("%s is already inspected", inspectionID)
+// 	}
+// 	inspection.InspectionStatus = true
+// 	inspection.InspectionDate = time.Now().Format("2006-01-02 15:04:05")
+// 	inspection.Images = images
+// 	inspection.VehicleDetailInfo = detailInfo
+// 	inspection.Etc = etc
 
-	newInspectionData, _ := json.Marshal(inspection)
-	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), newInspectionData)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
-	}
+// 	newInspectionData, _ := json.Marshal(inspection)
+// 	err = ctx.GetStub().PutState(strconv.Itoa(inspection.ID), newInspectionData)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
+// 	}
 
-	return inspection, nil
-}
+// 	return inspection, nil
+// }
 
 func (s *SmartContract) QueryAllInspections(ctx contractapi.TransactionContextInterface) ([]Inspection, error) {
 	queryString := `{

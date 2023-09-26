@@ -1,7 +1,7 @@
 package models
 
 type Inspection struct {
-	ID               int64      `json:"id"`
+	ID               int      `json:"id"`
 	InspectionStatus bool       `json:"inspectionStatus"`
 	RequestDate      string     `json:"requestDate"`
 	InspectionDate   string     `json:"inspectionDate"`

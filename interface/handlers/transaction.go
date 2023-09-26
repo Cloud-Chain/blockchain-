@@ -22,7 +22,10 @@ func SellVehicle(c *gin.Context) {
 	org := c.GetHeader("org")
 	userID := c.GetHeader("userID")
 	cert := c.GetHeader("CA-User")
+	fmt.Println(org + " , " + userID + " , " + cert)
+	fmt.Printf("%v+",request)
 	if err := c.BindJSON(&request); err != nil {
+		fmt.Println("err1")
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
 		return
 	}
@@ -107,8 +110,8 @@ func checkCertForTransaction(org, userID, cert string) bool {
 	fileContent, err := ioutil.ReadFile(certPath)
 
 	// 모든 개행 문자를 제거
-	convertedUserCert := strings.ReplaceAll(cert, "\n", "")
-	convertedUserCert = strings.ReplaceAll(cert, "\\n", "")
+	convertedUserCert := strings.ReplaceAll(cert, "\"", "")
+	convertedUserCert = strings.ReplaceAll(convertedUserCert, `\n`, "")
 	convertedFileCert := strings.ReplaceAll(string(fileContent), "\n", "")
 	fmt.Println("cert : " + convertedUserCert)
 	fmt.Println("file : " + convertedFileCert)

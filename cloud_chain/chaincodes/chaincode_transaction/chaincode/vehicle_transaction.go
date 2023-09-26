@@ -119,7 +119,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface, transactionID string, seller Participant, transactionDetails TransactionDetails) (*Transaction, error) {
 	// Assign new ID to the transaction
 	newTransactionDetails := TransactionDetails{
-		TransactionState:             "Selling",
+		TransactionState:             "Inspecting",
 		VehicleRegistrationNumber:    transactionDetails.VehicleRegistrationNumber,
 		NewVehicleRegistrationNumber: "",
 		VehicleModelName:             transactionDetails.VehicleModelName,

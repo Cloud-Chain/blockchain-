@@ -29,8 +29,8 @@ func SetupRouter(r *gin.Engine) {
 	ix := r.Group("/ix")
 	{
 		ix.GET("/inspect", handlers.FindInspection)
-		//ix.POST("/inspect", handlers.RequestInspection)
-		ix.POST("/inspect", handlers.ExecuteInspection)
+		ix.POST("/inspect", handlers.RequestInspection)
+		ix.PATCH("/inspect", handlers.ExecuteInspection)
 		ix.GET("/", handlers.GetAllInspections)
 	}
 

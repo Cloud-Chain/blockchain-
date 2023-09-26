@@ -19,6 +19,8 @@ func EnrollUser(request CertRequest) string {
 	// 명령 실행 및 결과 수집
 	output, err := cmd.CombinedOutput()
 	if err != nil {
+		fmt.Println(output)
+		fmt.Println(scriptPath+"makeUser.sh")
 		fmt.Printf("에러 발생: %s\n", err)
 		return err.Error()
 	}

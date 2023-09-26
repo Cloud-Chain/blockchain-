@@ -47,7 +47,7 @@ func InspectRequest(basicInfo BasicInfo, pc config.PeerConfig) Inspection {
 	fmt.Println("\n*** InspectRequest committed successfully")
 	fmt.Printf("resultJSON : %s \n", result)
 
-	var resultStruct Inspection // YourResultStruct는 결과를 언마샬링할 구조체로 대체
+	var resultStruct Inspection 
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
