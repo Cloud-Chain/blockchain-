@@ -46,7 +46,7 @@ services:
       - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
       # - /cgroup:/cgroup:ro
     ports:
-      - 10100:10100
+      - 10100:8080
     restart: always
 
   node-exporter:
