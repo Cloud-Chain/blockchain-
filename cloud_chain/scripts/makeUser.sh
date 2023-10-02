@@ -9,6 +9,7 @@ buyer="buyer"
 inspector="inspector"
 
 export FABRIC_CA_CLIENT_HOME=${PROJECT_PATH}/organizations/peerOrganizations/${ORG}.example.com/
+export PATH=$PATH:/home/jeho/blockchain-repo/bin
 echo $FABRIC_CA_CLIENT_HOME
 fabric-ca-client register --caname ca-${ORG} --id.name ${ID} --id.secret ${PW} --id.type client --tls.certfiles "${PROJECT_PATH}/organizations/fabric-ca/${ORG}/ca-cert.pem"
 # sleep 1
