@@ -15,7 +15,7 @@ type SmartContract struct {
 }
 
 type Transaction struct {
-	ID                 int64              `json:"id"`
+	ID                 int              `json:"id"`
 	UploadDate         string             `json:"uploadDate"`
 	Assignor           Participant        `json:"assignor"`
 	Assignee           Participant        `json:"assignee"`
@@ -107,7 +107,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 
 	for _, transaction := range transactions {
 		transactionData, _ := json.Marshal(transaction)
-		err := ctx.GetStub().PutState(strconv.FormatInt(transaction.ID, 10), transactionData)
+		err := ctx.GetStub().PutState(strconv.Itoa(transaction.ID), transactionData)
 
 		if err != nil {
 			return fmt.Errorf("Failed to put to world state. %s", err.Error())
@@ -117,6 +117,13 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface, transactionID string, seller Participant, transactionDetails TransactionDetails) (*Transaction, error) {
+	lastTransactionID, err := ctx.GetStub().GetState("lastTransactionID")
+	lastID := int(0)
+	if lastTransactionID != nil {
+		lastID, _ = strconv.Atoi(string(lastTransactionID))
+	} else {
+		lastID = 0
+	}
 	// Assign new ID to the transaction
 	newTransactionDetails := TransactionDetails{
 		TransactionState:             "Inspecting",
@@ -131,12 +138,12 @@ func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface,
 		VehicleDeliveryAddress:       "",
 		Mileage:                      transactionDetails.Mileage,
 	}
-	parseID, err := strconv.ParseInt(transactionID, 10, 64)
-	if err != nil {
-		fmt.Errorf("Failed to parsing transactionID as int64. %s", err.Error())
-	}
+	// parseID, err := strconv.ParseInt(transactionID, 10, 64)
+	// if err != nil {
+	// 	fmt.Errorf("Failed to parsing transactionID as int64. %s", err.Error())
+	// }
 	transaction := Transaction{
-		ID:                 parseID,
+		ID:                 lastID+1,
 		UploadDate:         time.Now().Format("2006-01-02 15:04:05"),
 		Assignor:           seller,
 		Assignee:           Participant{},
@@ -148,13 +155,17 @@ func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface,
 		return nil, fmt.Errorf("Failed to marshaling transaction as bytes. %s", err.Error())
 	}
 
-	err = ctx.GetStub().PutState(strconv.FormatInt(transaction.ID, 10), transactionAsBytes)
+	err = ctx.GetStub().PutState(strconv.Itoa(transaction.ID), transactionAsBytes)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to put transaction to world state. %s", err.Error())
 	}
 	err = ctx.GetStub().SetEvent("SellVehicle", transactionAsBytes)
 	if err != nil {
 		log.Println(err.Error())
+	}
+	err = ctx.GetStub().PutState("lastTransactionID", []byte(strconv.Itoa(transaction.ID)))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to update lastTransactionID in world state: %s", err.Error())
 	}
 
 	return &transaction, nil
@@ -188,7 +199,7 @@ func (s *SmartContract) BuyVehicle(
 	transaction.TransactionDetails.VehicleDeliveryAddress = transactionDetails.VehicleDeliveryAddress
 
 	newTransactionData, _ := json.Marshal(transaction)
-	err = ctx.GetStub().PutState(strconv.FormatInt(transaction.ID, 10), newTransactionData)
+	err = ctx.GetStub().PutState(strconv.Itoa(transaction.ID), newTransactionData)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
@@ -247,7 +258,7 @@ func (s *SmartContract) CompromiseTransaction(
 	}
 
 	newTransactionData, _ := json.Marshal(transaction)
-	err = ctx.GetStub().PutState(strconv.FormatInt(transaction.ID, 10), newTransactionData)
+	err = ctx.GetStub().PutState(strconv.Itoa(transaction.ID), newTransactionData)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
@@ -255,7 +266,7 @@ func (s *SmartContract) CompromiseTransaction(
 	if err != nil {
 		log.Println(err.Error())
 	}
-	err = ctx.GetStub().PutState(strconv.FormatInt(transaction.ID, 10), newTransactionData)
+	err = ctx.GetStub().PutState(strconv.Itoa(transaction.ID), newTransactionData)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to put to world state. %s", err.Error())
 	}
@@ -323,7 +334,13 @@ func (s *SmartContract) QueryTransactionsByVehicle(ctx contractapi.TransactionCo
 
 func (s *SmartContract) QueryAllTransactions(ctx contractapi.TransactionContextInterface) ([]Transaction, error) {
 	// Empty selector for CouchDB - this will get all Transactions from the ledger
-	queryString := `{"selector":{}}`
+	queryString := `{
+		"selector": {
+		   "transactionDetails.transactionAmount": {
+			  "$gte": 0
+		   }
+		}
+	 }`
 
 	resultsIterator, err := ctx.GetStub().GetQueryResult(queryString)
 	if err != nil {
