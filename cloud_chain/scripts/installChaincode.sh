@@ -82,9 +82,37 @@ chaincodeinstall(){
     cat log.txt
 }
 
+chaincodeinstall2(){
+    export CORE_PEER_TLS_ENABLED=true
+    echo "Seller2에 transaction 체인코드 설치"
+    setGlobals2 seller
+    peer lifecycle chaincode install package/transaction.tar.gz >&log.txt
+    cat log.txt
+    echo "Buyer2에 transaction 체인코드 설치"
+    setGlobals2 buyer
+    peer lifecycle chaincode install package/transaction.tar.gz >&log.txt
+    cat log.txt
+    echo "inspector2에 transaction 체인코드 설치"
+    setGlobals2 inspector
+    peer lifecycle chaincode install package/transaction.tar.gz >&log.txt
+    echo "Seller2에 inspection 체인코드 설치"
+    setGlobals2 seller
+    peer lifecycle chaincode install package/inspection.tar.gz >&log.txt
+    cat log.txt
+    echo "Buyer2에 inspection 체인코드 설치"
+    setGlobals2 buyer
+    peer lifecycle chaincode install package/inspection.tar.gz >&log.txt
+    cat log.txt
+    echo "inspector2에 inspection 체인코드 설치"
+    setGlobals2 inspector
+    peer lifecycle chaincode install package/inspection.tar.gz >&log.txt
+    cat log.txt
+}
+
 peer version
 echo $FABRIC_CFG_PATH
 
 packaging
 chaincodeinstall
+chaincodeinstall2
 

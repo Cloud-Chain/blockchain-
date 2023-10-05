@@ -61,6 +61,28 @@ joinChannel() {
 	cat log.txt
 	verifyResult $res "After $MAX_RETRY attempts, peer0.${ORG} has failed to join channel '$CHANNEL_NAME' "
 }
+#joinChannel 채널이름 Org이름
+joinChannel2() {
+  FABRIC_CFG_PATH=$PWD/../config/
+  CHANNEL_NAME=$1
+  ORG=$2
+  setGlobals2 $ORG
+  BLOCKFILE="./channel-artifacts/${CHANNEL_NAME}.block"
+	local rc=1
+	local COUNTER=1
+	## Sometimes Join takes time, hence retry
+	while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
+    sleep $DELAY
+    set -x
+    peer channel join -b $BLOCKFILE >&log.txt
+    res=$?
+    { set +x; } 2>/dev/null
+		let rc=$res
+		COUNTER=$(expr $COUNTER + 1)
+	done
+	cat log.txt
+	verifyResult $res "After $MAX_RETRY attempts, peer0.${ORG} has failed to join channel '$CHANNEL_NAME' "
+}
 #setAnchorPeer 채널이름 Org이름
 setAnchorPeer() {
   CHANNEL_NAME=$1
@@ -75,11 +97,13 @@ makeGenesisBlock
 FABRIC_CFG_PATH=$PWD/../config/
 infoln "seller를 vehicles에 가입중.."
 joinChannel vehicles seller
+joinChannel2 vehicles seller
 infoln "buyer를 vehicles에 가입중.."
 joinChannel vehicles buyer
+joinChannel2 vehicles buyer
 infoln "inspector를 vehicles에 가입중.."
 joinChannel vehicles inspector
-
+joinChannel2 vehicles inspector
 
 infoln "seller를 AnchorPeer 설정 중.."
 setAnchorPeer vehicles seller

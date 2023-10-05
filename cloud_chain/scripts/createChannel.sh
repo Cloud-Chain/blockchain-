@@ -76,6 +76,27 @@ joinChannel() {
 	verifyResult $res "After $MAX_RETRY attempts, peer0.org${ORG} has failed to join channel '$CHANNEL_NAME' "
 }
 
+# joinChannel ORG
+joinChannel2() {
+  FABRIC_CFG_PATH=$PWD/../config/
+  ORG=$1
+  setGlobals2 $ORG
+	local rc=1
+	local COUNTER=1
+	## Sometimes Join takes time, hence retry
+	while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
+    sleep $DELAY
+    set -x
+    peer channel join -b $BLOCKFILE >&log.txt
+    res=$?
+    { set +x; } 2>/dev/null
+		let rc=$res
+		COUNTER=$(expr $COUNTER + 1)
+	done
+	cat log.txt
+	verifyResult $res "After $MAX_RETRY attempts, peer0.org${ORG} has failed to join channel '$CHANNEL_NAME' "
+}
+
 setAnchorPeer() {
   ORG=$1
   echo "CONTAINER_CLI : $CONTAINER_CLI"
@@ -100,12 +121,16 @@ successln "Channel '$CHANNEL_NAME' created"
 ## Join all the peers to the channel
 infoln "Joining org1 peer to the channel..."
 joinChannel 1
+joinChannel2 1
 infoln "Joining org2 peer to the channel..."
 joinChannel 2
+joinChannel2 2
 infoln "Joining org3 peer to the channel..."
 joinChannel 3
+joinChannel2 3
 infoln "Joining org4 peer to the channel..."
 joinChannel 4
+joinChannel2 4
 
 ## Set the anchor peers for each org in the channel
 infoln "Setting anchor peer for org1..."

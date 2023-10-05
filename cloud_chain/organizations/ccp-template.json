@@ -15,7 +15,8 @@
         "${ORG}": {
             "mspid": "${ORG}MSP",
             "peers": [
-                "peer0.${ORG}.example.com"
+                "peer0.${ORG}.example.com",
+                "peer1.${ORG}.example.com"  
             ],
             "certificateAuthorities": [
                 "ca.${ORG}.example.com"
@@ -32,6 +33,16 @@
                 "ssl-target-name-override": "peer0.${ORG}.example.com",
                 "hostnameOverride": "peer0.${ORG}.example.com"
             }
+        },
+        "peer1.${ORG}.example.com": {  
+            "url": "grpcs://localhost:${P1PORT}",
+            "tlsCACerts": {
+                "pem": "${PEER1PEM}"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.${ORG}.example.com",
+                "hostnameOverride": "peer1.${ORG}.example.com"
+            }
         }
     },
     "certificateAuthorities": {
@@ -47,3 +58,4 @@
         }
     }
 }
+

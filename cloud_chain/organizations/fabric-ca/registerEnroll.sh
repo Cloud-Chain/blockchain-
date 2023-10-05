@@ -44,6 +44,11 @@ function createSeller() {
   fabric-ca-client register --caname ca-seller --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
   { set +x; } 2>/dev/null
 
+  infoln "Registering peer1"
+  set -x
+  fabric-ca-client register --caname ca-seller --id.name peer1 --id.secret peer1pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
   infoln "Registering user"
   set -x
   fabric-ca-client register --caname ca-seller --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
@@ -61,6 +66,14 @@ function createSeller() {
 
   cp "${PWD}/organizations/peerOrganizations/seller.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/msp/config.yaml"
 
+  infoln "Generating the peer1 msp"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:7054 --caname ca-seller -M "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/msp" --csr.hosts peer1.seller.example.com --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/seller.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/msp/config.yaml"
+
+
   infoln "Generating the peer0-tls certificates"
   set -x
   fabric-ca-client enroll -u http://peer0:peer0pw@localhost:7054 --caname ca-seller -M "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls" --enrollment.profile tls --csr.hosts peer0.seller.example.com --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
@@ -70,6 +83,16 @@ function createSeller() {
   cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/tlscacerts/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/ca.crt"
   cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/signcerts/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/server.crt"
   cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/keystore/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com/tls/server.key"
+
+  infoln "Generating the peer1-tls certificates"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:7054 --caname ca-seller -M "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls" --enrollment.profile tls --csr.hosts peer1.seller.example.com --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/seller/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/tlscacerts/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/ca.crt"
+  cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/signcerts/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/server.crt"
+  cp "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/keystore/"* "${PWD}/organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com/tls/server.key"
+
 
   infoln "Generating the user msp"
   set -x
@@ -130,6 +153,11 @@ function createBuyer() {
   fabric-ca-client register --caname ca-buyer --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
   { set +x; } 2>/dev/null
 
+  infoln "Registering peer1"
+  set -x
+  fabric-ca-client register --caname ca-buyer --id.name peer1 --id.secret peer1pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
   infoln "Registering user"
   set -x
   fabric-ca-client register --caname ca-buyer --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
@@ -147,6 +175,14 @@ function createBuyer() {
 
   cp "${PWD}/organizations/peerOrganizations/buyer.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/msp/config.yaml"
 
+  infoln "Generating the peer1 msp"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:8054 --caname ca-buyer -M "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/msp" --csr.hosts peer1.buyer.example.com --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/buyer.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/msp/config.yaml"
+
+
   infoln "Generating the peer0-tls certificates"
   set -x
   fabric-ca-client enroll -u http://peer0:peer0pw@localhost:8054 --caname ca-buyer -M "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls" --enrollment.profile tls --csr.hosts peer0.buyer.example.com --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
@@ -156,6 +192,15 @@ function createBuyer() {
   cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/tlscacerts/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/ca.crt"
   cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/signcerts/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/server.crt"
   cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/keystore/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com/tls/server.key"
+
+  infoln "Generating the peer1-tls certificates"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:8054 --caname ca-buyer -M "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls" --enrollment.profile tls --csr.hosts peer1.buyer.example.com --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/buyer/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/tlscacerts/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/ca.crt"
+  cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/signcerts/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/server.crt"
+  cp "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/keystore/"* "${PWD}/organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com/tls/server.key"
 
   infoln "Generating the user msp"
   set -x
@@ -202,6 +247,11 @@ function createInspector {
 	fabric-ca-client register --caname ca-inspector --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles ${PWD}/organizations/fabric-ca/inspector/tls-cert.pem
   { set +x; } 2>/dev/null
 
+  infoln "Registering peer1"
+  set -x
+  fabric-ca-client register --caname ca-inspector --id.name peer1 --id.secret peer1pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/inspector/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
   infoln "Registering user"
   set -x
   fabric-ca-client register --caname ca-inspector --id.name user1 --id.secret user1pw --id.type client --tls.certfiles ${PWD}/organizations/fabric-ca/inspector/tls-cert.pem
@@ -219,11 +269,17 @@ function createInspector {
 
   cp ${PWD}/organizations/peerOrganizations/inspector.example.com/msp/config.yaml ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/msp/config.yaml
 
+  infoln "Generating the peer1 msp"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:11054 --caname ca-inspector -M "${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/msp" --csr.hosts peer1.inspector.example.com --tls.certfiles "${PWD}/organizations/fabric-ca/inspector/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/inspector.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/msp/config.yaml"
+
   infoln "Generating the peer0-tls certificates"
   set -x
   fabric-ca-client enroll -u http://peer0:peer0pw@localhost:11054 --caname ca-inspector -M ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/tls --enrollment.profile tls --csr.hosts peer0.inspector.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/inspector/tls-cert.pem
   { set +x; } 2>/dev/null
-
 
   cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/tls/tlscacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/tls/ca.crt
   cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/tls/signcerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/tls/server.crt
@@ -238,6 +294,25 @@ function createInspector {
   mkdir ${PWD}/organizations/peerOrganizations/inspector.example.com/ca
   cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com/msp/cacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/ca/ca.inspector.example.com-cert.pem
 
+  infoln "Generating the peer1-tls certificates"
+  set -x
+  fabric-ca-client enroll -u http://peer1:peer1pw@localhost:11054 --caname ca-inspector -M ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls --enrollment.profile tls --csr.hosts peer1.inspector.example.com --csr.hosts localhost --tls.certfiles ${PWD}/organizations/fabric-ca/inspector/tls-cert.pem
+  { set +x; } 2>/dev/null
+
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/tlscacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/ca.crt
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/signcerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/server.crt
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/keystore/* ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/server.key
+
+  mkdir ${PWD}/organizations/peerOrganizations/inspector.example.com/msp/tlscacerts
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/tlscacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/msp/tlscacerts/ca.crt
+
+  mkdir ${PWD}/organizations/peerOrganizations/inspector.example.com/tlsca
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/tls/tlscacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/tlsca/tlsca.inspector.example.com-cert.pem
+
+  mkdir ${PWD}/organizations/peerOrganizations/inspector.example.com/ca
+  cp ${PWD}/organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com/msp/cacerts/* ${PWD}/organizations/peerOrganizations/inspector.example.com/ca/ca.inspector.example.com-cert.pem
+
+  
   infoln "Generating the user msp"
   set -x
 	fabric-ca-client enroll -u http://user1:user1pw@localhost:11054 --caname ca-inspector -M ${PWD}/organizations/peerOrganizations/inspector.example.com/users/User1@inspector.example.com/msp --tls.certfiles ${PWD}/organizations/fabric-ca/inspector/tls-cert.pem
