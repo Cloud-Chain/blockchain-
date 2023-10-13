@@ -65,7 +65,7 @@ func SellerCompromiseTransaction(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
-	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.SellerConfig)
+	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.SellerConfig, org)
 	c.IndentedJSON(http.StatusOK, result)
 }
 func BuyerCompromiseTransaction(c *gin.Context) {
@@ -81,7 +81,7 @@ func BuyerCompromiseTransaction(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": "잘못된 인증서입니다."})
 		return
 	}
-	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.BuyerConfig)
+	result := models.CompromiseTransaction(request.ID, request.TransactionDetails, config.BuyerConfig, org)
 	c.IndentedJSON(http.StatusOK, result)
 }
 func ReadTransaction(c *gin.Context) {
@@ -104,7 +104,7 @@ func QueryAllTransactions(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, result)
 }
 func checkCertForTransaction(org, userID, cert string) bool {
-	certPath := fmt.Sprintf("%s/%s.example.com/users/%s@%s.example.com/msp/signcerts/cert.pem", config.PROJECT_PATH, org, userID, org)
+	certPath := fmt.Sprintf("%s/%s.pnu.cse/users/%s@%s.pnu.cse/msp/signcerts/cert.pem", config.PROJECT_PATH, org, userID, org)
 
 	// 파일 읽기
 	fileContent, err := ioutil.ReadFile(certPath)

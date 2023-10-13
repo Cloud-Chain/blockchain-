@@ -34,29 +34,29 @@ const (
 var (
 	SellerConfig = PeerConfig{
 		MSPID:        "sellerMSP",
-		CertPath:     PROJECT_PATH + "/seller.example.com" + "/users/User1@seller.example.com/msp/signcerts/cert.pem",
-		KeyPath:      PROJECT_PATH + "/seller.example.com" + "/users/User1@seller.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/seller.example.com" + "/peers/peer0.seller.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/seller.pnu.cse" + "/users/User1@seller.pnu.cse/msp/signcerts/cert.pem",
+		KeyPath:      PROJECT_PATH + "/seller.pnu.cse" + "/users/User1@seller.pnu.cse/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/seller.pnu.cse" + "/peers/peer0.seller.pnu.cse/tls/ca.crt",
 		PeerEndpoint: "localhost:7051",
-		GatewayPeer:  "peer0.seller.example.com",
+		GatewayPeer:  "peer0.seller.pnu.cse",
 	}
 
 	BuyerConfig = PeerConfig{
 		MSPID:        "buyerMSP",
-		CertPath:     PROJECT_PATH + "/buyer.example.com" + "/users/User1@buyer.example.com/msp/signcerts/cert.pem",
-		KeyPath:      PROJECT_PATH + "/buyer.example.com" + "/users/User1@buyer.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/buyer.example.com" + "/peers/peer0.buyer.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/buyer.pnu.cse" + "/users/User1@buyer.pnu.cse/msp/signcerts/cert.pem",
+		KeyPath:      PROJECT_PATH + "/buyer.pnu.cse" + "/users/User1@buyer.pnu.cse/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/buyer.pnu.cse" + "/peers/peer0.buyer.pnu.cse/tls/ca.crt",
 		PeerEndpoint: "localhost:9051", // Buyer 피어의 gRPC 엔드포인트
-		GatewayPeer:  "peer0.buyer.example.com",
+		GatewayPeer:  "peer0.buyer.pnu.cse",
 	}
 
 	InspectorConfig = PeerConfig{
 		MSPID:        "inspectorMSP",
-		CertPath:     PROJECT_PATH + "/inspector.example.com" + "/users/User1@inspector.example.com/msp/signcerts/cert.pem",
-		KeyPath:      PROJECT_PATH + "/inspector.example.com" + "/users/User1@inspector.example.com/msp/keystore/",
-		TLSCertPath:  PROJECT_PATH + "/inspector.example.com" + "/peers/peer0.inspector.example.com/tls/ca.crt",
+		CertPath:     PROJECT_PATH + "/inspector.pnu.cse" + "/users/User1@inspector.pnu.cse/msp/signcerts/cert.pem",
+		KeyPath:      PROJECT_PATH + "/inspector.pnu.cse" + "/users/User1@inspector.pnu.cse/msp/keystore/",
+		TLSCertPath:  PROJECT_PATH + "/inspector.pnu.cse" + "/peers/peer0.inspector.pnu.cse/tls/ca.crt",
 		PeerEndpoint: "localhost:11051", // Inspector 피어의 gRPC 엔드포인트
-		GatewayPeer:  "peer0.inspector.example.com",
+		GatewayPeer:  "peer0.inspector.pnu.cse",
 	}
 )
 
@@ -94,10 +94,6 @@ func (pc *PeerConfig) Connect() {
 	pc.Network = gateway.GetNetwork(CHANNEL_NAME)
 	pc.TransactionContract = pc.Network.GetContract(TRANSACTION_CONTRACT_NAME)
 	pc.InspectionContract = pc.Network.GetContract(INSPECTION_CONTRACT_NAME)
-
-	//fmt.Printf("*** first:%s\n", contract)
-	//ctx, _ := context.WithCancel(context.Background())
-
 }
 
 func (pc *PeerConfig) newGrpcConnection() *grpc.ClientConn {

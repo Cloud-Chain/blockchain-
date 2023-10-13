@@ -27,7 +27,7 @@ services:
     networks:
       - test
 
-  peer0.seller.example.com:
+  peer0.seller.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=sellerdb:5984
@@ -56,7 +56,7 @@ services:
     networks:
       - test
 
-  peer0.buyer.example.com:
+  peer0.buyer.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=buyerdb:5984
@@ -85,7 +85,7 @@ services:
     networks:
       - test
 
-  peer0.inspector.example.com:
+  peer0.inspector.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=inspectordb:5984
@@ -143,7 +143,7 @@ services:
     networks:
       - test
 
-  peer0.seller.example.com:
+  peer0.seller.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=sellerdb:5984
@@ -152,7 +152,7 @@ services:
     depends_on:
       - sellerdb
 
-  peer1.seller.example.com:  # Add peer1 configuration
+  peer1.seller.pnu.cse:  # Add peer1 configuration
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=sellerdb:5984
@@ -161,7 +161,7 @@ services:
     depends_on:
       - sellerdb
 
-  peer0.buyer.example.com:
+  peer0.buyer.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=buyerdb:5984
@@ -170,7 +170,7 @@ services:
     depends_on:
       - buyerdb
 
-  peer1.buyer.example.com:  # Add peer1 configuration
+  peer1.buyer.pnu.cse:  # Add peer1 configuration
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=buyerdb:5984
@@ -179,7 +179,7 @@ services:
     depends_on:
       - buyerdb
 
-  peer0.inspector.example.com:
+  peer0.inspector.pnu.cse:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=inspectordb:5984
@@ -188,7 +188,7 @@ services:
     depends_on:
       - inspectordb
 
-  peer1.inspector.example.com:  # Add peer1 configuration
+  peer1.inspector.pnu.cse:  # Add peer1 configuration
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=inspectordb:5984

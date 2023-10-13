@@ -25,7 +25,7 @@ func EnrollUser(request CertRequest) string {
 		return err.Error()
 	}
 	fmt.Printf("명령 실행 결과:\n%s\n", string(output))
-	filePath := fmt.Sprintf("/home/jeho/blockchain-repo/cloud_chain/organizations/peerOrganizations/%s.example.com/users/%s@%s.example.com/msp/signcerts/cert.pem",
+	filePath := fmt.Sprintf("/home/jeho/blockchain-repo/cloud_chain/organizations/peerOrganizations/%s.pnu.cse/users/%s@%s.pnu.cse/msp/signcerts/cert.pem",
 		request.Org, request.UserID, request.Org)
 	// 파일 읽기
 	fileContent, err := ioutil.ReadFile(filePath)

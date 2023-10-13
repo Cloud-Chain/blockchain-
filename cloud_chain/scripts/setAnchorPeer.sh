@@ -18,13 +18,13 @@ createAnchorPeerUpdate() {
   infoln "Generating anchor peer update transaction for Org${ORG} on channel $CHANNEL_NAME"
 
   if [ $ORG == "seller" ]; then
-    HOST="peer0.seller.example.com"
+    HOST="peer0.seller.pnu.cse"
     PORT=7051
   elif [ $ORG == "buyer" ]; then
-    HOST="peer0.buyer.example.com"
+    HOST="peer0.buyer.pnu.cse"
     PORT=9051
   elif [ $ORG == "inspector" ]; then
-    HOST="peer0.inspector.example.com"
+    HOST="peer0.inspector.pnu.cse"
     PORT=11051
   else
     errorln "Org${ORG} unknown"
@@ -42,7 +42,7 @@ createAnchorPeerUpdate() {
 }
 
 updateAnchorPeer() {
-  peer channel update -o orderer.example.com:7050 --ordererTLSHostnameOverride orderer.example.com -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile "$ORDERER_CA" >&log.txt
+  peer channel update -o orderer.pnu.cse:7050 --ordererTLSHostnameOverride orderer.pnu.cse -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile "$ORDERER_CA" >&log.txt
   res=$?
   # cat log.txt
   verifyResult $res "Anchor peer update failed"

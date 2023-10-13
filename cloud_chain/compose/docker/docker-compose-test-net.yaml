@@ -5,8 +5,8 @@
 
 version: '3.7'
 services:
-  peer0.seller.example.com:
-    container_name: peer0.seller.example.com
+  peer0.seller.pnu.cse:
+    container_name: peer0.seller.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -17,8 +17,8 @@ services:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
 
-  peer1.seller.example.com: 
-    container_name: peer1.seller.example.com
+  peer1.seller.pnu.cse: 
+    container_name: peer1.seller.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -29,8 +29,8 @@ services:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
 
-  peer0.buyer.example.com:
-    container_name: peer0.buyer.example.com
+  peer0.buyer.pnu.cse:
+    container_name: peer0.buyer.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -41,8 +41,8 @@ services:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
 
-  peer1.buyer.example.com:  
-    container_name: peer1.buyer.example.com
+  peer1.buyer.pnu.cse:  
+    container_name: peer1.buyer.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -53,8 +53,8 @@ services:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
 
-  peer0.inspector.example.com:
-    container_name: peer0.inspector.example.com
+  peer0.inspector.pnu.cse:
+    container_name: peer0.inspector.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -65,8 +65,8 @@ services:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
 
-  peer1.inspector.example.com: 
-    container_name: peer1.inspector.example.com
+  peer1.inspector.pnu.cse: 
+    container_name: peer1.inspector.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric

@@ -6,13 +6,13 @@
 version: '3.7'
 
 volumes:
-  orderer.example.com:
-  peer0.seller.example.com:
-  peer0.buyer.example.com:
-  peer0.inspector.example.com:
-  peer1.seller.example.com:
-  peer1.buyer.example.com:
-  peer1.inspector.example.com:
+  orderer.pnu.cse:
+  peer0.seller.pnu.cse:
+  peer0.buyer.pnu.cse:
+  peer0.inspector.pnu.cse:
+  peer1.seller.pnu.cse:
+  peer1.buyer.pnu.cse:
+  peer1.inspector.pnu.cse:
 
 networks:
   test:
@@ -20,8 +20,8 @@ networks:
 
 services:
 
-  orderer.example.com:
-    container_name: orderer.example.com
+  orderer.pnu.cse:
+    container_name: orderer.pnu.cse
     image: hyperledger/fabric-orderer:latest
     labels:
       service: hyperledger-fabric
@@ -47,14 +47,14 @@ services:
       - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
-      - ORDERER_OPERATIONS_LISTENADDRESS=orderer.example.com:9443
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer.pnu.cse:9443
       - ORDERER_METRICS_PROVIDER=prometheus
     working_dir: /root
     command: orderer
     volumes:
-        - ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-        - ../organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
-        - orderer.example.com:/var/hyperledger/production/orderer
+        - ../organizations/ordererOrganizations/pnu.cse/orderers/orderer.pnu.cse/msp:/var/hyperledger/orderer/msp
+        - ../organizations/ordererOrganizations/pnu.cse/orderers/orderer.pnu.cse/tls/:/var/hyperledger/orderer/tls
+        - orderer.pnu.cse:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
       - 7053:7053
@@ -62,8 +62,8 @@ services:
     networks:
       - test
 
-  peer0.seller.example.com:
-    container_name: peer0.seller.example.com
+  peer0.seller.pnu.cse:
+    container_name: peer0.seller.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -77,22 +77,22 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.seller.example.com
-      - CORE_PEER_ADDRESS=peer0.seller.example.com:7051
+      - CORE_PEER_ID=peer0.seller.pnu.cse
+      - CORE_PEER_ADDRESS=peer0.seller.pnu.cse:7051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.seller.example.com:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.seller.pnu.cse:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.seller.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.seller.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.seller.pnu.cse:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.seller.pnu.cse:7051
       - CORE_PEER_LOCALMSPID=sellerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.seller.example.com:9444
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.seller.pnu.cse:9444
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0seller"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/seller.example.com/peers/peer0.seller.example.com:/etc/hyperledger/fabric
-        - peer0.seller.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/seller.pnu.cse/peers/peer0.seller.pnu.cse:/etc/hyperledger/fabric
+        - peer0.seller.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -101,8 +101,8 @@ services:
     networks:
       - test
 
-  peer0.buyer.example.com:
-    container_name: peer0.buyer.example.com
+  peer0.buyer.pnu.cse:
+    container_name: peer0.buyer.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -116,22 +116,22 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.buyer.example.com
-      - CORE_PEER_ADDRESS=peer0.buyer.example.com:9051
+      - CORE_PEER_ID=peer0.buyer.pnu.cse
+      - CORE_PEER_ADDRESS=peer0.buyer.pnu.cse:9051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.buyer.example.com:9052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.buyer.pnu.cse:9052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.buyer.example.com:9051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.buyer.example.com:9051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.buyer.pnu.cse:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.buyer.pnu.cse:9051
       - CORE_PEER_LOCALMSPID=buyerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp      
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.buyer.example.com:9445
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.buyer.pnu.cse:9445
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0buyer"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/buyer.example.com/peers/peer0.buyer.example.com:/etc/hyperledger/fabric
-        - peer0.buyer.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/buyer.pnu.cse/peers/peer0.buyer.pnu.cse:/etc/hyperledger/fabric
+        - peer0.buyer.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -142,8 +142,8 @@ services:
 
 
 # peer3
-  peer0.inspector.example.com:
-    container_name: peer0.inspector.example.com
+  peer0.inspector.pnu.cse:
+    container_name: peer0.inspector.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -158,23 +158,23 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Peer specific variables
-      - CORE_PEER_ID=peer0.inspector.example.com
-      - CORE_PEER_ADDRESS=peer0.inspector.example.com:11051
+      - CORE_PEER_ID=peer0.inspector.pnu.cse
+      - CORE_PEER_ADDRESS=peer0.inspector.pnu.cse:11051
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
       - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.inspector.example.com:11052
+      - CORE_PEER_CHAINCODEADDRESS=peer0.inspector.pnu.cse:11052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.inspector.example.com:11051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.inspector.example.com:11051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.inspector.pnu.cse:11051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.inspector.pnu.cse:11051
       - CORE_PEER_LOCALMSPID=inspectorMSP
-      - CORE_OPERATIONS_LISTENADDRESS=peer0.inspector.example.com:9446
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.inspector.pnu.cse:9446
       - CORE_METRICS_PROVIDER=prometheus
       #이부분 바꿈 peerOseller -> peerOinspector
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0inspector"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s      
     volumes:
-        - ../organizations/peerOrganizations/inspector.example.com/peers/peer0.inspector.example.com:/etc/hyperledger/fabric        
-        - peer0.inspector.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/inspector.pnu.cse/peers/peer0.inspector.pnu.cse:/etc/hyperledger/fabric        
+        - peer0.inspector.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -183,8 +183,8 @@ services:
     networks:
       - test
 
-  peer1.seller.example.com:
-    container_name: peer1.seller.example.com
+  peer1.seller.pnu.cse:
+    container_name: peer1.seller.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -196,22 +196,22 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-      - CORE_PEER_ID=peer1.seller.example.com
-      - CORE_PEER_ADDRESS=peer1.seller.example.com:7151
+      - CORE_PEER_ID=peer1.seller.pnu.cse
+      - CORE_PEER_ADDRESS=peer1.seller.pnu.cse:7151
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7151
-      - CORE_PEER_CHAINCODEADDRESS=peer1.seller.example.com:7152
+      - CORE_PEER_CHAINCODEADDRESS=peer1.seller.pnu.cse:7152
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7152
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.seller.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.seller.example.com:7151
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.seller.pnu.cse:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.seller.pnu.cse:7151
       - CORE_PEER_LOCALMSPID=sellerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
-      - CORE_OPERATIONS_LISTENADDRESS=peer1.seller.example.com:9447
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.seller.pnu.cse:9447
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1seller"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/seller.example.com/peers/peer1.seller.example.com:/etc/hyperledger/fabric
-        - peer1.seller.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/seller.pnu.cse/peers/peer1.seller.pnu.cse:/etc/hyperledger/fabric
+        - peer1.seller.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -220,8 +220,8 @@ services:
     networks:
       - test
 
-  peer1.buyer.example.com:
-    container_name: peer1.buyer.example.com
+  peer1.buyer.pnu.cse:
+    container_name: peer1.buyer.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -233,22 +233,22 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-      - CORE_PEER_ID=peer1.buyer.example.com
-      - CORE_PEER_ADDRESS=peer1.buyer.example.com:9151
+      - CORE_PEER_ID=peer1.buyer.pnu.cse
+      - CORE_PEER_ADDRESS=peer1.buyer.pnu.cse:9151
       - CORE_PEER_LISTENADDRESS=0.0.0.0:9151
-      - CORE_PEER_CHAINCODEADDRESS=peer1.buyer.example.com:9152
+      - CORE_PEER_CHAINCODEADDRESS=peer1.buyer.pnu.cse:9152
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9152
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.buyer.example.com:9051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.buyer.example.com:9151
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.buyer.pnu.cse:9051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.buyer.pnu.cse:9151
       - CORE_PEER_LOCALMSPID=buyerMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp      
-      - CORE_OPERATIONS_LISTENADDRESS=peer1.buyer.example.com:9448
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.buyer.pnu.cse:9448
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1buyer"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s
     volumes:
-        - ../organizations/peerOrganizations/buyer.example.com/peers/peer1.buyer.example.com:/etc/hyperledger/fabric
-        - peer1.buyer.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/buyer.pnu.cse/peers/peer1.buyer.pnu.cse:/etc/hyperledger/fabric
+        - peer1.buyer.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -258,8 +258,8 @@ services:
       - test
 
 # peer3
-  peer1.inspector.example.com:
-    container_name: peer1.inspector.example.com
+  peer1.inspector.pnu.cse:
+    container_name: peer1.inspector.pnu.cse
     image: hyperledger/fabric-peer:latest
     labels:
       service: hyperledger-fabric
@@ -271,22 +271,22 @@ services:
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-      - CORE_PEER_ID=peer1.inspector.example.com
-      - CORE_PEER_ADDRESS=peer1.inspector.example.com:11151
+      - CORE_PEER_ID=peer1.inspector.pnu.cse
+      - CORE_PEER_ADDRESS=peer1.inspector.pnu.cse:11151
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
       - CORE_PEER_LISTENADDRESS=0.0.0.0:11151
-      - CORE_PEER_CHAINCODEADDRESS=peer1.inspector.example.com:11152
+      - CORE_PEER_CHAINCODEADDRESS=peer1.inspector.pnu.cse:11152
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11152
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.inspector.example.com:11051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.inspector.example.com:11151
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.inspector.pnu.cse:11051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.inspector.pnu.cse:11151
       - CORE_PEER_LOCALMSPID=inspectorMSP
-      - CORE_OPERATIONS_LISTENADDRESS=peer1.inspector.example.com:9449
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.inspector.pnu.cse:9449
       - CORE_METRICS_PROVIDER=prometheus
       - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1inspector"}
       - CORE_CHAINCODE_EXECUTETIMEOUT=300s      
     volumes:
-        - ../organizations/peerOrganizations/inspector.example.com/peers/peer1.inspector.example.com:/etc/hyperledger/fabric        
-        - peer1.inspector.example.com:/var/hyperledger/production
+        - ../organizations/peerOrganizations/inspector.pnu.cse/peers/peer1.inspector.pnu.cse:/etc/hyperledger/fabric        
+        - peer1.inspector.pnu.cse:/var/hyperledger/production
     working_dir: /root
     command: peer node start
     ports:
@@ -314,8 +314,8 @@ services:
         - ../organizations:/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations
         - ../scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     depends_on:
-      - peer0.seller.example.com
-      - peer0.buyer.example.com
-      - peer0.inspector.example.com
+      - peer0.seller.pnu.cse
+      - peer0.buyer.pnu.cse
+      - peer0.inspector.pnu.cse
     networks:
       - test

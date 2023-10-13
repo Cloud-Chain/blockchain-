@@ -19,6 +19,7 @@ require (
 	github.com/gobuffalo/envy v1.10.1 // indirect
 	github.com/gobuffalo/packd v1.0.1 // indirect
 	github.com/gobuffalo/packr v1.30.1 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect

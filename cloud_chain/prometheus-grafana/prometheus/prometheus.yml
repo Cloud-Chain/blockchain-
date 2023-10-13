@@ -9,16 +9,16 @@ scrape_configs:
       - targets: ["localhost:9090"]
   - job_name: "orderer"
     static_configs:
-      - targets: ["orderer.example.com:9443"]
+      - targets: ["orderer.pnu.cse:9443"]
   - job_name: "peer0_seller"
     static_configs:
-      - targets: ["peer0.seller.example.com:9444"]
+      - targets: ["peer0.seller.pnu.cse:9444"]
   - job_name: "peer0_buyer"
     static_configs:
-      - targets: ["peer0.buyer.example.com:9445"]
+      - targets: ["peer0.buyer.pnu.cse:9445"]
   - job_name: "peer0_inspector"
     static_configs:
-      - targets: ["peer0.inspector.example.com:9446"]
+      - targets: ["peer0.inspector.pnu.cse:9446"]
   - job_name: cadvisor
     scrape_interval: 5s
     static_configs:

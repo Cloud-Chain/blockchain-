@@ -6,7 +6,8 @@ import (
 	"log"
 	"strconv"
 	"time"
-
+	"github.com/hyperledger/fabric-protos-go/msp"
+	"github.com/gogo/protobuf/proto"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -51,7 +52,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 			Assignor:   Participant{Name: "test1", ResidentRegistrationNumber: "1111111-1111111", PhoneNumber: "111-1111-1111", Address: "1111 TEST St"},
 			Assignee:   Participant{},
 			TransactionDetails: TransactionDetails{
-				TransactionState:             "Inspecting",
+				TransactionState:             "SellerRequest",
 				VehicleRegistrationNumber:    "111A1111",
 				NewVehicleRegistrationNumber: "",
 				VehicleModelName:             "Tesla Model A - 1111",
@@ -70,7 +71,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 			Assignor:   Participant{Name: "test2", ResidentRegistrationNumber: "222222-2222222", PhoneNumber: "222-2222-2222", Address: "2222 TEST St"},
 			Assignee:   Participant{},
 			TransactionDetails: TransactionDetails{
-				TransactionState:             "ForSale",
+				TransactionState:             "SellerRequest",
 				VehicleRegistrationNumber:    "222B2222",
 				NewVehicleRegistrationNumber: "",
 				VehicleModelName:             "Tesla Model S - 2222",
@@ -102,6 +103,25 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 				Mileage:                      30000,
 			},
 		},
+		{
+			ID:         999999996,
+			UploadDate: "2023-06-23 00:00:00",
+			Assignor:   Participant{Name: "test3", ResidentRegistrationNumber: "333333-3333333", PhoneNumber: "333-3333-3333", Address: "3333 TEST St"},
+			Assignee:   Participant{Name: "test4", ResidentRegistrationNumber: "444444-4444444", PhoneNumber: "444-4444-4444", Address: "4444 TEST St"},
+			TransactionDetails: TransactionDetails{
+				TransactionState:             "BuyerRequest",
+				VehicleRegistrationNumber:    "333C3333",
+				NewVehicleRegistrationNumber: "444C4444",
+				VehicleModelName:             "Tesla Model S - 3333",
+				VehicleIdentificationNumber:  "5YJ3E1EA1JF33333",
+				TransactionDate:              "2023-06-25 00:00:00",
+				TransactionAmount:            1000,
+				BalancePaymentDate:           "2023-06-27 00:00:00",
+				VehicleDeliveryDate:          "2023-06-27 00:00:00",
+				VehicleDeliveryAddress:       "4444 TEST St",
+				Mileage:                      30000,
+			},
+		},
 		// Add more transactions if required...
 	}
 
@@ -117,6 +137,16 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface, transactionID string, seller Participant, transactionDetails TransactionDetails) (*Transaction, error) {
+	creator,err := ctx.GetStub().GetCreator()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get creator : %v", err)
+	}
+	sId := &msp.SerializedIdentity{}
+	err = proto.Unmarshal(creator,sId)
+	if sId.GetMspid() != "sellerMSP" {
+		return nil, fmt.Errorf("%v does not have permission for update vehicle inspection results.\n", sId.GetMspid())
+	}
+	
 	lastTransactionID, err := ctx.GetStub().GetState("lastTransactionID")
 	lastID := int(0)
 	if lastTransactionID != nil {
@@ -126,7 +156,7 @@ func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface,
 	}
 	// Assign new ID to the transaction
 	newTransactionDetails := TransactionDetails{
-		TransactionState:             "Inspecting",
+		TransactionState:             "SellerRequest",
 		VehicleRegistrationNumber:    transactionDetails.VehicleRegistrationNumber,
 		NewVehicleRegistrationNumber: "",
 		VehicleModelName:             transactionDetails.VehicleModelName,
@@ -171,9 +201,17 @@ func (s *SmartContract) SellVehicle(ctx contractapi.TransactionContextInterface,
 	return &transaction, nil
 }
 
-func (s *SmartContract) BuyVehicle(
-	ctx contractapi.TransactionContextInterface, transactionID string, buyer Participant, transactionDetails TransactionDetails) (*Transaction, error) {
-
+func (s *SmartContract) BuyVehicle(ctx contractapi.TransactionContextInterface, transactionID string, buyer Participant, transactionDetails TransactionDetails) (*Transaction, error) {
+	creator,err := ctx.GetStub().GetCreator()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get creator : %v", err)
+	}
+	sId := &msp.SerializedIdentity{}
+	err = proto.Unmarshal(creator,sId)
+	if sId.GetMspid() != "buyerMSP" {
+		return nil, fmt.Errorf("%v does not have permission for update vehicle inspection results.\n", sId.GetMspid())
+	}
+		
 	oldTransactionData, err := ctx.GetStub().GetState(transactionID)
 
 	if err != nil {
@@ -191,7 +229,7 @@ func (s *SmartContract) BuyVehicle(
 		return nil, fmt.Errorf("Vehicle is already sold")
 	}
 	transaction.Assignee = buyer
-	transaction.TransactionDetails.TransactionState = transactionDetails.TransactionState
+	transaction.TransactionDetails.TransactionState = "BuyerRequest"
 	transaction.TransactionDetails.NewVehicleRegistrationNumber = transactionDetails.NewVehicleRegistrationNumber
 	// transaction.TransactionDetails.TradingDate =
 	transaction.TransactionDetails.BalancePaymentDate = transactionDetails.BalancePaymentDate
@@ -212,6 +250,7 @@ func (s *SmartContract) BuyVehicle(
 }
 
 func (s *SmartContract) ReadTransaction(ctx contractapi.TransactionContextInterface, transactionID string) (*Transaction, error) {
+	
 	transactionData, err := ctx.GetStub().GetState(transactionID)
 
 	if err != nil {
@@ -232,6 +271,15 @@ func (s *SmartContract) CompromiseTransaction(
 	ctx contractapi.TransactionContextInterface, transactionID string, transactionDetails TransactionDetails) (*Transaction, error) {
 	oldTransactionData, err := ctx.GetStub().GetState(transactionID)
 
+	creator,err := ctx.GetStub().GetCreator()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get creator : %v", err)
+	}
+	sId := &msp.SerializedIdentity{}
+	err = proto.Unmarshal(creator,sId)
+	if sId.GetMspid() == "inspectorMSP" {
+		return nil, fmt.Errorf("%v does not have permission for update vehicle inspection results.\n", sId.GetMspid())
+	}
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read from world state. %s", err.Error())
 	}

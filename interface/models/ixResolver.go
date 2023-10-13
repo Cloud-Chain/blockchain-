@@ -32,7 +32,7 @@ func InspectRequest(basicInfo BasicInfo, pc config.PeerConfig) Inspection {
 	result, commit, err := pc.InspectionContract.SubmitAsync("InspectRequest",
 		client.WithArguments(string(basicInfoJSON)))
 	if err != nil {
-		panic(fmt.Errorf("failed to submit InspectRequest transaction: %w", err))
+		panic(fmt.Errorf("failed to submit InspectRequest transaction: %+v", err))	
 	}
 
 	status, err := commit.Status()

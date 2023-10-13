@@ -11,15 +11,15 @@
 . scripts/utils.sh
 
 export CORE_PEER_TLS_ENABLED=true
-export ORDERER_CA=${PWD}/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
-export PEER0_seller_CA=${PWD}/organizations/peerOrganizations/seller.example.com/tlsca/tlsca.seller.example.com-cert.pem
-export PEER0_buyer_CA=${PWD}/organizations/peerOrganizations/buyer.example.com/tlsca/tlsca.buyer.example.com-cert.pem
-export PEER0_inspector_CA=${PWD}/organizations/peerOrganizations/inspector.example.com/tlsca/tlsca.inspector.example.com-cert.pem
-export PEER1_seller_CA=${PWD}/organizations/peerOrganizations/seller.example.com/tlsca/tlsca.seller.example.com-cert.pem
-export PEER1_buyer_CA=${PWD}/organizations/peerOrganizations/buyer.example.com/tlsca/tlsca.buyer.example.com-cert.pem
-export PEER1_inspector_CA=${PWD}/organizations/peerOrganizations/inspector.example.com/tlsca/tlsca.inspector.example.com-cert.pem
-export ORDERER_ADMIN_TLS_SIGN_CERT=${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
-export ORDERER_ADMIN_TLS_PRIVATE_KEY=${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.key
+export ORDERER_CA=${PWD}/organizations/ordererOrganizations/pnu.cse/tlsca/tlsca.pnu.cse-cert.pem
+export PEER0_seller_CA=${PWD}/organizations/peerOrganizations/seller.pnu.cse/tlsca/tlsca.seller.pnu.cse-cert.pem
+export PEER0_buyer_CA=${PWD}/organizations/peerOrganizations/buyer.pnu.cse/tlsca/tlsca.buyer.pnu.cse-cert.pem
+export PEER0_inspector_CA=${PWD}/organizations/peerOrganizations/inspector.pnu.cse/tlsca/tlsca.inspector.pnu.cse-cert.pem
+export PEER1_seller_CA=${PWD}/organizations/peerOrganizations/seller.pnu.cse/tlsca/tlsca.seller.pnu.cse-cert.pem
+export PEER1_buyer_CA=${PWD}/organizations/peerOrganizations/buyer.pnu.cse/tlsca/tlsca.buyer.pnu.cse-cert.pem
+export PEER1_inspector_CA=${PWD}/organizations/peerOrganizations/inspector.pnu.cse/tlsca/tlsca.inspector.pnu.cse-cert.pem
+export ORDERER_ADMIN_TLS_SIGN_CERT=${PWD}/organizations/ordererOrganizations/pnu.cse/orderers/orderer.pnu.cse/tls/server.crt
+export ORDERER_ADMIN_TLS_PRIVATE_KEY=${PWD}/organizations/ordererOrganizations/pnu.cse/orderers/orderer.pnu.cse/tls/server.key
 
 # Set environment variables for the peer org
 setGlobals() {
@@ -33,18 +33,18 @@ setGlobals() {
   if [ $USING_ORG == "seller" ]; then
     export CORE_PEER_LOCALMSPID="sellerMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_seller_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/seller.example.com/users/Admin@seller.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/seller.pnu.cse/users/Admin@seller.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:7051
   elif [ $USING_ORG == "buyer" ]; then
     export CORE_PEER_LOCALMSPID="buyerMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_buyer_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/buyer.example.com/users/Admin@buyer.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/buyer.pnu.cse/users/Admin@buyer.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:9051
 
   elif [ $USING_ORG == "inspector" ]; then
     export CORE_PEER_LOCALMSPID="inspectorMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_inspector_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/inspector.example.com/users/Admin@inspector.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/inspector.pnu.cse/users/Admin@inspector.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:11051
   else
     infoln "error"
@@ -67,18 +67,18 @@ setGlobals2() {
   if [ $USING_ORG == "seller" ]; then
     export CORE_PEER_LOCALMSPID="sellerMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER1_seller_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/seller.example.com/users/Admin@seller.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/seller.pnu.cse/users/Admin@seller.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:7151
   elif [ $USING_ORG == "buyer" ]; then
     export CORE_PEER_LOCALMSPID="buyerMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER1_buyer_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/buyer.example.com/users/Admin@buyer.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/buyer.pnu.cse/users/Admin@buyer.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:9151
 
   elif [ $USING_ORG == "inspector" ]; then
     export CORE_PEER_LOCALMSPID="inspectorMSP"
     export CORE_PEER_TLS_ROOTCERT_FILE=$PEER1_inspector_CA
-    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/inspector.example.com/users/Admin@inspector.example.com/msp
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/inspector.pnu.cse/users/Admin@inspector.pnu.cse/msp
     export CORE_PEER_ADDRESS=localhost:11151
   else
     infoln "error"
@@ -101,11 +101,11 @@ setGlobalsCLI() {
     USING_ORG="${OVERRIDE_ORG}"
   fi
   if [ $USING_ORG == "seller" ]; then
-    export CORE_PEER_ADDRESS=peer0.seller.example.com:7051
+    export CORE_PEER_ADDRESS=peer0.seller.pnu.cse:7051
   elif [ $USING_ORG == "buyer" ]; then
-    export CORE_PEER_ADDRESS=peer0.buyer.example.com:9051
+    export CORE_PEER_ADDRESS=peer0.buyer.pnu.cse:9051
   elif [ $USING_ORG == "inspector" ]; then
-    export CORE_PEER_ADDRESS=peer0.inspector.example.com:11051
+    export CORE_PEER_ADDRESS=peer0.inspector.pnu.cse:11051
   else
     errorln "ORG Unknown"
   fi

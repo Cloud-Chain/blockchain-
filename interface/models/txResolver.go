@@ -87,9 +87,16 @@ func BuyVehicle(id int64, buyer Participant, details TransactionDetails, pc conf
 	fmt.Printf("resultStruct %+v", resultStruct)
 	return resultStruct
 }
-func CompromiseTransaction(id int64, details TransactionDetails, pc config.PeerConfig) Transaction {
+func CompromiseTransaction(id int64, details TransactionDetails, pc config.PeerConfig ,org string) Transaction {
+	if details.TransactionState != "Accept" && org == "seller" {
+		details.TransactionState = "SellerRequest"
+	} 
+	if details.TransactionState != "Accept" && org == "buyer" {
+		details.TransactionState = "BuyerRequest"
+	} 
+	
 	detailsJSON, err := json.Marshal(details)
-
+	
 	result, commit, err := pc.TransactionContract.SubmitAsync("CompromiseTransaction",
 		client.WithArguments(strconv.FormatInt(id, 10), string(detailsJSON)))
 	if err != nil {

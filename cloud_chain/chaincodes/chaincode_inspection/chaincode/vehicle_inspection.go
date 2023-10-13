@@ -6,7 +6,8 @@ import (
 	"log"
 	"strconv"
 	"time"
-
+	"github.com/hyperledger/fabric-protos-go/msp"
+	"github.com/gogo/protobuf/proto"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -123,6 +124,16 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	return nil
 }
 func (s *SmartContract) InspectRequest(ctx contractapi.TransactionContextInterface, basicInfo BasicInfo) (*Inspection, error) {
+	creator,err := ctx.GetStub().GetCreator()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get creator : %v", err)
+	}
+	sId := &msp.SerializedIdentity{}
+	err = proto.Unmarshal(creator,sId)
+	if sId.GetMspid() != "sellerMSP" {
+		return nil, fmt.Errorf("%v does not have permission for vehicle inspection requests.\n", sId.GetMspid())
+	}
+
 	lastInspectionID, err := ctx.GetStub().GetState("lastInspectionID")
 	lastID := int(0)
 	if lastInspectionID != nil {
@@ -202,6 +213,16 @@ func (s *SmartContract) QueryInspectionResult(ctx contractapi.TransactionContext
 }
 
 func (s *SmartContract) InspectResult(ctx contractapi.TransactionContextInterface, inspection Inspection) (*Inspection, error) {
+	creator,err := ctx.GetStub().GetCreator()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get creator : %v", err)
+	}
+	sId := &msp.SerializedIdentity{}
+	err = proto.Unmarshal(creator,sId)
+	if sId.GetMspid() != "inspectorMSP" {
+		return nil, fmt.Errorf("%v does not have permission for update vehicle inspection results.\n", sId.GetMspid())
+	}
+	
 	inspection.InspectionStatus = true
 	inspection.RequestDate = time.Now().Format("2006-01-02 15:04:05")
 
