@@ -9,4 +9,19 @@
 
 <img width="481" alt="스크린샷 2023-10-17 오후 11 23 32" src="https://github.com/Cloud-Chain/blockchain-repo/assets/78259314/1dcc583c-cf85-4775-bc92-ef4752150cbd">
 
-### 폴더 구조
+### 주요 디렉토리 구조
+
+중요 디렉토리만 반영되었습니다.
+
+📦 blockchain-repo    
+ ┣ 📂 cloud_chain : 블록체인 네트워크 구성 파일
+ ┃ ┣ 📂 chaincodes : 스마트 컨트랙트 파일
+ ┃ ┣ 📂 compose : 블록체인 네트워크 docker compose 파일
+ ┃ ┣ 📂 prometheus-grafana : 블록체인 네트워크 + 내부 컨테이너 모니터링을 위한 구성 파일
+ ┃ ┣ 📂 scripts : 블록체인 관리를 위한 쉘스크립트 파일
+ ┣ 📂 config : 블록체인 설정 파일
+ ┣ 📂 interface : 블록체인 <-> 시스템 통신을 위한 인터페이스 서버 파일
+ ┃ ┣ 📂 config : 블록체인 통신을 위한 Fabric-Gatewat SDK 설정 파일
+ ┃ ┣ 📂 handlers : 요청 처리를 담당하는 파일
+ ┃ ┣ 📂 models :  블록체인 데이터를 다루는 파일
+ ┗ ┗ 📂 router : 라우팅 및 URL 처리를 담당하는 파일
