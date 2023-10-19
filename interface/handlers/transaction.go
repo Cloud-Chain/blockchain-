@@ -22,8 +22,6 @@ func SellVehicle(c *gin.Context) {
 	org := c.GetHeader("org")
 	userID := c.GetHeader("userID")
 	cert := c.GetHeader("CA-User")
-	fmt.Println(org + " , " + userID + " , " + cert)
-	fmt.Printf("%v+",request)
 	if err := c.BindJSON(&request); err != nil {
 		fmt.Println("err1")
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"err": err})
@@ -113,8 +111,8 @@ func checkCertForTransaction(org, userID, cert string) bool {
 	convertedUserCert := strings.ReplaceAll(cert, "\"", "")
 	convertedUserCert = strings.ReplaceAll(convertedUserCert, `\n`, "")
 	convertedFileCert := strings.ReplaceAll(string(fileContent), "\n", "")
-	fmt.Println("cert : " + convertedUserCert)
-	fmt.Println("file : " + convertedFileCert)
+	fmt.Println("request cert : " + convertedUserCert)
+	fmt.Println("saved cert in blockchain : " + convertedFileCert)
 	if err != nil {
 		return false
 	} else if convertedFileCert != convertedUserCert {

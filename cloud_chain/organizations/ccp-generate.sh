@@ -29,29 +29,29 @@ function yaml_ccp {
 ORG=seller
 P0PORT=7051
 CAPORT=7054
-PEERPEM=organizations/peerOrganizations/seller.example.com/tlsca/tlsca.seller.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/seller.example.com/ca/ca.seller.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/seller.pnu.cse/tlsca/tlsca.seller.pnu.cse-cert.pem
+CAPEM=organizations/peerOrganizations/seller.pnu.cse/ca/ca.seller.pnu.cse-cert.pem
 
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/seller.example.com/connection-seller.json
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/seller.pnu.cse/connection-seller.json
 
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/seller.example.com/connection-seller.yaml
+echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/seller.pnu.cse/connection-seller.yaml
 
 ORG=buyer
 P0PORT=9051
 CAPORT=8054
-PEERPEM=organizations/peerOrganizations/buyer.example.com/tlsca/tlsca.buyer.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/buyer.example.com/ca/ca.buyer.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/buyer.pnu.cse/tlsca/tlsca.buyer.pnu.cse-cert.pem
+CAPEM=organizations/peerOrganizations/buyer.pnu.cse/ca/ca.buyer.pnu.cse-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/buyer.example.com/connection-buyer.json
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/buyer.example.com/connection-buyer.yaml
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/buyer.pnu.cse/connection-buyer.json
+echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/buyer.pnu.cse/connection-buyer.yaml
 
 
 ORG=inspector
 P0PORT=11051
 CAPORT=11054
-PEERPEM=organizations/peerOrganizations/inspector.example.com/tlsca/tlsca.inspector.example.com-cert.pem
-CAPEM=organizations/peerOrganizations/inspector.example.com/ca/ca.inspector.example.com-cert.pem
+PEERPEM=organizations/peerOrganizations/inspector.pnu.cse/tlsca/tlsca.inspector.pnu.cse-cert.pem
+CAPEM=organizations/peerOrganizations/inspector.pnu.cse/ca/ca.inspector.pnu.cse-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/inspector.example.com/connection-inspector.json
-echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/inspector.example.com/connection-inspector.yaml
+echo "$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/inspector.pnu.cse/connection-inspector.json
+echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/inspector.pnu.cse/connection-inspector.yaml

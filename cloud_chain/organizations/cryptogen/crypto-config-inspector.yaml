@@ -11,7 +11,7 @@ PeerOrgs:
   # inspector
   # ---------------------------------------------------------------------------
   - Name: inspector
-    Domain: inspector.example.com
+    Domain: inspector.pnu.cse
     EnableNodeOUs: true
     Template:
       Count: 1

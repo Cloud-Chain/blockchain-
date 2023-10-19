@@ -11,7 +11,7 @@ PeerOrgs:
   # Org4
   # ---------------------------------------------------------------------------
   - Name: koreapower
-    Domain: koreapower.example.com
+    Domain: koreapower.pnu.cse
     EnableNodeOUs: true
     Template:
       Count: 1

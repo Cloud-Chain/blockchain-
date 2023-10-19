@@ -48,13 +48,15 @@ func SellVehicle(id int64, seller Participant, details TransactionDetails, pc co
 	}
 
 	fmt.Println("\n*** SellVehicle committed successfully")
-	fmt.Printf("resultJSON : %s \n", result)
+	printStatus(status)
+	
 
 	var resultStruct Transaction // YourResultStruct는 결과를 언마샬링할 구조체로 대체
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
-	fmt.Printf("resultStruct %+v", resultStruct)
+	// resultJSON, _ := json.MarshalIndent(resultStruct, "", "    ")
+	// fmt.Printf("resultStruct:\n%s\n", resultJSON)
 	return resultStruct
 }
 
@@ -78,13 +80,15 @@ func BuyVehicle(id int64, buyer Participant, details TransactionDetails, pc conf
 	}
 
 	fmt.Println("\n*** BuyVehicle committed successfully")
-	fmt.Printf("resultJSON : %s \n", result)
+	printStatus(status)
 
 	var resultStruct Transaction // YourResultStruct는 결과를 언마샬링할 구조체로 대체
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
-	fmt.Printf("resultStruct %+v", resultStruct)
+	// fmt.Printf("resultStruct %+v", resultStruct)
+	// resultJSON, _ := json.MarshalIndent(resultStruct, "", "    ")
+	// fmt.Printf("resultStruct:\n%s\n", resultJSON)
 	return resultStruct
 }
 func CompromiseTransaction(id int64, details TransactionDetails, pc config.PeerConfig ,org string) Transaction {
@@ -113,13 +117,15 @@ func CompromiseTransaction(id int64, details TransactionDetails, pc config.PeerC
 	}
 
 	fmt.Println("\n*** CompromiseTransaction committed successfully")
-	fmt.Printf("resultJSON : %s \n", result)
+	printStatus(status)
 
 	var resultStruct Transaction // YourResultStruct는 결과를 언마샬링할 구조체로 대체
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
-	fmt.Printf("resultStruct %+v", resultStruct)
+	// fmt.Printf("resultStruct %+v", resultStruct)
+	// resultJSON, _ := json.MarshalIndent(resultStruct, "", "    ")
+	// fmt.Printf("resultStruct:\n%s\n", resultJSON)
 	return resultStruct
 }
 func ReadTransaction(id string, pc config.PeerConfig) Transaction {

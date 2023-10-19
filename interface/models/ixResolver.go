@@ -45,20 +45,18 @@ func InspectRequest(basicInfo BasicInfo, pc config.PeerConfig) Inspection {
 	}
 
 	fmt.Println("\n*** InspectRequest committed successfully")
-	fmt.Printf("resultJSON : %s \n", result)
+	printStatus(status)
 
 	var resultStruct Inspection 
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
-	fmt.Printf("resultStruct %+v", resultStruct)
+	// fmt.Printf("resultStruct %+v", resultStruct)
 	return resultStruct
 }
 
 func InspectResult(inspection Inspection, pc config.PeerConfig) Inspection {
 	inspectionJSON, err := json.Marshal(inspection)
-	//detailInfoJSON, err := json.Marshal(detailInfo)
-	//imagesJSON, err := json.Marshal(images)
 	result, commit, err := pc.InspectionContract.SubmitAsync("InspectResult",
 		client.WithArguments(string(inspectionJSON)))
 	if err != nil {
@@ -75,13 +73,13 @@ func InspectResult(inspection Inspection, pc config.PeerConfig) Inspection {
 	}
 
 	fmt.Println("\n*** InspectResult committed successfully")
-	fmt.Printf("resultJSON : %s \n", result)
+	printStatus(status)
 
 	var resultStruct Inspection // YourResultStruct는 결과를 언마샬링할 구조체로 대체
 	if err := json.Unmarshal(result, &resultStruct); err != nil {
 		panic(fmt.Errorf("failed to unmarshal result JSON: %s, %w", resultStruct, err))
 	}
-	fmt.Printf("resultStruct %+v", resultStruct)
+	// fmt.Printf("resultStruct %+v", resultStruct)
 	return resultStruct
 }
 
@@ -119,4 +117,13 @@ func QueryAllInspections(pc config.PeerConfig) []Inspection {
 
 	fmt.Printf("resultStruct %+v", resultStruct)
 	return resultStruct
+}
+
+func printStatus(s *client.Status) {
+	fmt.Printf("Status:\n")
+	fmt.Printf("  Code: %v\n", s.Code)
+	fmt.Printf("  Successful: %v\n", s.Successful)
+	fmt.Printf("  TransactionID: %v\n", s.TransactionID)
+	fmt.Printf("  BlockNumber: %v\n", s.BlockNumber)
+	fmt.Println()
 }

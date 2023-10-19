@@ -2,15 +2,13 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"interface/config"
 	"interface/handlers"
-	"interface/models"
 )
 
 func SetupRouter(r *gin.Engine) {
 
-	models.TransactionInitLedger(config.SellerConfig)
-	models.InspectionInitLedger(config.SellerConfig)
+	// models.TransactionInitLedger(config.SellerConfig)
+	// models.InspectionInitLedger(config.SellerConfig)
 
 	//거래 라우팅 설정
 	tx := r.Group("/tx")
